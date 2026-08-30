@@ -1,0 +1,90 @@
+﻿@using Ana_CV_page.Models
+
+<section id="contact" class="contact">
+
+    <div class="contact__inner">
+
+        <p class="contact__eyebrow">
+            Get in touch
+        </p>
+
+        <h2>
+            Let's connect<span>.</span>
+        </h2>
+
+        <p class="contact__intro">
+            Interested in accounting, finance systems,
+            digital transformation and smarter processes?
+            Let's talk.
+        </p>
+
+        <div class="contact__actions">
+
+            @if (!string.IsNullOrWhiteSpace(Profile.Email))
+            {
+                <a class="contact__button contact__button--primary"
+                   href="mailto:@Profile.Email">
+
+                    Email me
+                    <span>→</span>
+
+                </a>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Profile.LinkedInUrl))
+            {
+                <a class="contact__button contact__button--secondary"
+                   href="@Profile.LinkedInUrl"
+                   target="_blank"
+                   rel="noopener noreferrer">
+
+                    LinkedIn
+                    <span>↗</span>
+
+                </a>
+            }
+
+            <a class="contact__button contact__button--secondary"
+               href="#">
+
+                Back to top
+                <span>↑</span>
+
+            </a>
+
+        </div>
+
+        <div class="contact__footer">
+
+            <div class="contact__identity">
+
+                <img src="images/camelion.png"
+                     alt=""
+                     class="contact__logo" />
+
+                <div>
+                    <strong>
+                        @Profile.FirstName @Profile.LastName
+                    </strong>
+
+                    <span>
+                        @Profile.ProfessionalTitle
+                    </span>
+                </div>
+
+            </div>
+
+            <span class="contact__location">
+                @Profile.Location
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+@code {
+    [Parameter, EditorRequired]
+    public Profile Profile { get; set; } = new();
+}

@@ -1,0 +1,54 @@
+﻿<section id="intro" class="intro-video">
+
+    <div class="intro-video__heading">
+        <p class="eyebrow">Meet Ana</p>
+
+        <h2>
+            A short introduction<span>.</span>
+        </h2>
+
+        <p>
+            A few words from Ana about her background,
+            what drives her and what she is looking for next.
+        </p>
+    </div>
+
+    <div class="intro-video__frame">
+
+        @if (!string.IsNullOrWhiteSpace(VideoUrl))
+        {
+            <video controls
+                   preload="metadata"
+                   poster="@PosterUrl">
+
+                <source src="@VideoUrl" type="video/mp4" />
+
+                Your browser does not support HTML video.
+            </video>
+        }
+        else
+        {
+            <div class="intro-video__placeholder">
+                <div class="intro-video__play">
+                    ▶
+                </div>
+
+                <strong>Video coming soon</strong>
+
+                <span>
+                    Ana will introduce herself here.
+                </span>
+            </div>
+        }
+
+    </div>
+
+</section>
+
+@code {
+    [Parameter]
+    public string? VideoUrl { get; set; }
+
+    [Parameter]
+    public string? PosterUrl { get; set; }
+}

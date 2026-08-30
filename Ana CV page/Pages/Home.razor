@@ -1,0 +1,47 @@
+﻿@page "/"
+@using Ana_CV_page.Models
+@using Ana_CV_page.Services
+@using Ana_CV_page.Components
+@inject CvDataService CvService
+
+<PageTitle>Ana-Maria Gheorghe</PageTitle>
+
+<TopNav />
+
+<Hero Profile="@cv.Profile" />
+
+<IntroVideo />
+
+<section id="experience" class="content-section">
+
+    <div class="section-heading">
+        <p class="eyebrow">Career</p>
+        <h2>Experience</h2>
+    </div>
+
+    <div>
+        @foreach (var experience in cv.Experiences.OrderBy(x => x.SortOrder))
+        {
+            <ExperienceCard Experience="@experience" />
+        }
+    </div>
+
+</section>
+
+<SkillSection Skills="@cv.Skills" />
+
+<BackgroundSection Education="@cv.Education"
+                   Languages="@cv.Languages" />
+
+<BeyondTheNumbers />
+
+<ContactSection Profile="@cv.Profile" />
+
+@code {
+    private CvData cv = new();
+
+    protected override void OnInitialized()
+    {
+        cv = CvService.GetCv();
+    }
+}

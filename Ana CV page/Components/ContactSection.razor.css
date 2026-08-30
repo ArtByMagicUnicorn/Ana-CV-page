@@ -1,0 +1,167 @@
+/* CSS for ContactSection component */
+.contact {
+    position: relative;
+    overflow: hidden;
+    margin-top: 3rem;
+    padding: 8rem 2rem 3rem;
+    background: var(--text);
+    color: white;
+}
+
+    /* Subtle decorative glow */
+
+    .contact::before {
+        content: "";
+        position: absolute;
+        width: 32rem;
+        height: 32rem;
+        top: -14rem;
+        right: -8rem;
+        border-radius: 50%;
+        background: var(--accent);
+        opacity: 0.18;
+        filter: blur(1px);
+        pointer-events: none;
+    }
+
+.contact__inner {
+    position: relative;
+    z-index: 1;
+    max-width: var(--content-width);
+    margin: 0 auto;
+}
+
+.contact__eyebrow {
+    margin: 0 0 1.5rem;
+    color: #cbb8ab;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}
+
+.contact h2 {
+    max-width: 900px;
+    margin: 0;
+    font-size: clamp(4rem, 10vw, 8rem);
+    line-height: 0.9;
+    letter-spacing: -0.06em;
+}
+
+    .contact h2 span {
+        color: #b99b89;
+    }
+
+.contact__intro {
+    max-width: 600px;
+    margin: 2rem 0 2.5rem;
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 1.1rem;
+    line-height: 1.7;
+}
+
+
+/* ACTIONS */
+
+.contact__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+}
+
+.contact__button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.9rem 1.3rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform 160ms ease, background 160ms ease;
+}
+
+    .contact__button:hover {
+        transform: translateY(-2px);
+    }
+
+.contact__button--primary {
+    background: white;
+    color: var(--text);
+}
+
+.contact__button--secondary {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+    .contact__button--secondary:hover {
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+
+/* FOOTER */
+
+.contact__footer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-top: 7rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 0.8rem;
+}
+
+    .contact__footer div {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .contact__footer strong {
+        color: white;
+        font-size: 0.9rem;
+    }
+
+.contact__location {
+    text-align: right;
+}
+
+.contact__identity {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    gap: 0.9rem;
+}
+
+    .contact__identity > div {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+.contact__logo {
+    width: 3rem;
+    height: 3rem;
+    object-fit: contain;
+}
+
+
+@media (max-width: 700px) {
+
+    .contact {
+        padding: 6rem 1.5rem 2rem;
+    }
+
+    .contact__footer {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-top: 5rem;
+    }
+
+    .contact__location {
+        text-align: left;
+    }
+}

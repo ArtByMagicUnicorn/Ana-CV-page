@@ -1,0 +1,83 @@
+﻿@using Ana_CV_page.Models
+
+<section id="top" class="hero">
+    <div class="hero__content">
+
+        @if (Profile.OpenToWork)
+        {
+            <div class="hero__status">
+                <span class="hero__status-dot"></span>
+                Open to opportunities
+            </div>
+        }
+
+        <p class="hero__eyebrow">
+            Accounting · Finance Systems · ERP
+        </p>
+
+        <h1 class="hero__name">
+            @Profile.FirstName
+            <span>@Profile.LastName</span>
+        </h1>
+
+        <p class="hero__title">
+            @Profile.ProfessionalTitle
+        </p>
+
+        <p class="hero__summary">
+            @Profile.SummaryEnglish
+        </p>
+
+        <div class="hero__meta">
+            <span>📍 @Profile.Location</span>
+
+            @if (!string.IsNullOrWhiteSpace(Profile.PreferredWorkMode))
+            {
+                <span>◦ @Profile.PreferredWorkMode</span>
+            }
+        </div>
+
+        <div class="hero__actions">
+            <a class="button button--primary"
+               href="#experience">
+                View experience
+            </a>
+
+            @if (!string.IsNullOrWhiteSpace(Profile.LinkedInUrl))
+            {
+                <a class="button button--secondary"
+                   href="@Profile.LinkedInUrl"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    LinkedIn ↗
+                </a>
+            }
+        </div>
+    </div>
+
+    <div class="hero__visual">
+        <div class="hero__portrait">
+            @if (!string.IsNullOrWhiteSpace(Profile.ProfileImageUrl))
+            {
+                <img src="@Profile.ProfileImageUrl"
+                     alt="@($"{Profile.FirstName} {Profile.LastName}")" />
+            }
+            else
+            {
+                <div class="hero__portrait-placeholder">
+                    <span>AG</span>
+                </div>
+            }
+        </div>
+
+        <div class="hero__floating-card">
+            <span>Focus</span>
+            <strong>Finance × Technology</strong>
+        </div>
+    </div>
+</section>
+
+@code {
+    [Parameter, EditorRequired]
+    public Profile Profile { get; set; } = new();
+}

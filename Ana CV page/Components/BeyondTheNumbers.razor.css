@@ -1,0 +1,108 @@
+/* CSS for BeyondTheNumbers component */
+.beyond {
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: 8rem 2rem;
+}
+
+.beyond__header {
+    max-width: 900px;
+    margin-bottom: 4rem;
+}
+
+    .beyond__header h2 {
+        margin: 0;
+        color: var(--text);
+        font-size: clamp(3rem, 7vw, 5.5rem);
+        line-height: 0.95;
+        letter-spacing: -0.055em;
+    }
+
+        .beyond__header h2 span {
+            display: block;
+            color: var(--accent);
+        }
+
+.beyond__grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 5rem;
+    align-items: center;
+}
+
+.beyond__text {
+    max-width: 650px;
+}
+
+    .beyond__text p {
+        margin: 0 0 1.5rem;
+        color: var(--text-muted);
+        font-size: 1.08rem;
+        line-height: 1.85;
+    }
+
+.beyond__values {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin-top: 2.5rem;
+}
+
+    .beyond__values span {
+        padding: 0.65rem 1rem;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: var(--accent-light);
+        color: var(--accent);
+        font-size: 0.85rem;
+        font-weight: 700;
+    }
+
+.beyond__visual {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.beyond__image-placeholder {
+    width: min(100%, 380px);
+    aspect-ratio: 4 / 5;
+    display: grid;
+    place-items: center;
+    border-radius: 2rem 2rem 10rem 2rem;
+    background: linear-gradient( 145deg, var(--accent-light), #d9c9bb );
+    color: var(--accent);
+    font-weight: 700;
+}
+
+.beyond__lead {
+    color: var(--text) !important;
+    font-size: 1.25rem !important;
+    font-weight: 500;
+}
+
+.beyond__image {
+    width: min(100%, 380px);
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 2rem 2rem 10rem 2rem;
+}
+
+@media (max-width: 800px) {
+
+    .beyond {
+        padding: 6rem 1.5rem;
+    }
+
+    .beyond__grid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+
+    .beyond__visual {
+        justify-content: flex-start;
+    }
+
+    .beyond__image-placeholder {
+        width: min(85%, 360px);
+    }
+}

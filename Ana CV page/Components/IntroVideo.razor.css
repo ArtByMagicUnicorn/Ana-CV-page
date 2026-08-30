@@ -1,0 +1,111 @@
+/* CSS for IntroVideo component */
+.intro-video {
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: 7rem 2rem;
+}
+
+.intro-video__heading {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem 5rem;
+    margin-bottom: 3rem;
+}
+
+    .intro-video__heading .eyebrow {
+        grid-column: 1 / -1;
+    }
+
+    .intro-video__heading h2 {
+        margin: 0;
+        color: var(--text);
+        font-size: clamp(2.8rem, 6vw, 5rem);
+        line-height: 0.95;
+        letter-spacing: -0.05em;
+    }
+
+        .intro-video__heading h2 span {
+            color: var(--accent);
+        }
+
+    .intro-video__heading > p:last-child {
+        align-self: end;
+        max-width: 500px;
+        margin: 0;
+        color: var(--text-muted);
+        font-size: 1.05rem;
+        line-height: 1.8;
+    }
+
+
+/* VIDEO */
+
+.intro-video__frame {
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    border: 1px solid var(--border);
+    border-radius: 1.5rem;
+    background: #1f1f1d;
+    box-shadow: 0 20px 60px rgba(30, 25, 20, 0.08);
+}
+
+    .intro-video__frame video {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+
+/* PLACEHOLDER */
+
+.intro-video__placeholder {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 0.75rem;
+    padding: 2rem;
+    text-align: center;
+    background: radial-gradient( circle at 50% 40%, rgba(118, 92, 77, 0.3), transparent 18rem ), #272724;
+    color: white;
+}
+
+.intro-video__play {
+    width: 4.5rem;
+    height: 4.5rem;
+    display: grid;
+    place-items: center;
+    margin-bottom: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    font-size: 1.2rem;
+}
+
+.intro-video__placeholder strong {
+    font-size: 1.15rem;
+}
+
+.intro-video__placeholder span {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+}
+
+
+@media (max-width: 750px) {
+
+    .intro-video {
+        padding: 5rem 1.5rem;
+    }
+
+    .intro-video__heading {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .intro-video__frame {
+        border-radius: 1rem;
+    }
+}

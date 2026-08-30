@@ -1,0 +1,90 @@
+﻿@using Ana_CV_page.Models
+
+<article class="experience-card">
+
+    <div class="experience-card__period">
+        @Experience.StartDate.ToString("yyyy")
+        <span>–</span>
+        @(Experience.IsCurrent
+            ? "Present"
+            : Experience.EndDate?.ToString("yyyy"))
+    </div>
+
+    <div class="experience-card__marker">
+        <span></span>
+    </div>
+
+    <div class="experience-card__content">
+
+        <div class="experience-card__header">
+            <div>
+                <h3>@Experience.JobTitle</h3>
+
+                <p class="experience-card__company">
+                    @Experience.Company
+                </p>
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(Experience.Location))
+            {
+                <span class="experience-card__location">
+                    @Experience.Location
+
+                    @if (!string.IsNullOrWhiteSpace(Experience.WorkMode))
+                    {
+                        <span> · @Experience.WorkMode</span>
+                    }
+                </span>
+            }
+        </div>
+
+        @if (isExpanded)
+        {
+            <div class="experience-card__details">
+
+                @if (!string.IsNullOrWhiteSpace(Experience.Description))
+                {
+                    <p class="experience-card__description">
+                        @Experience.Description
+                    </p>
+                }
+
+                @if (Experience.Highlights.Count > 0)
+                {
+                    <div class="experience-card__highlights">
+                        @foreach (var highlight in Experience.Highlights)
+                        {
+                            <span>@highlight</span>
+                        }
+                    </div>
+                }
+
+            </div>
+        }
+
+        <button class="experience-card__toggle"
+                type="button"
+                @onclick="ToggleExpanded"
+                aria-expanded="@isExpanded">
+
+            @(isExpanded ? "Show less" : "Show more")
+
+            <span class="experience-card__arrow @(isExpanded ? "expanded" : "")">
+                ↓
+            </span>
+        </button>
+
+    </div>
+</article>
+
+@code {
+    [Parameter, EditorRequired]
+    public Experience Experience { get; set; } = new();
+
+    private bool isExpanded;
+
+    private void ToggleExpanded()
+    {
+        isExpanded = !isExpanded;
+    }
+}

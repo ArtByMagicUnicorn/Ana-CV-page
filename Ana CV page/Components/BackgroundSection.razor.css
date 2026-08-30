@@ -1,0 +1,77 @@
+/* CSS for BackgroundSection component */
+.background-section {
+    max-width: var(--content-width);
+    margin: 0 auto;
+    padding: 7rem 2rem;
+    display: grid;
+    grid-template-columns: 1.35fr 0.65fr;
+    gap: 6rem;
+}
+
+.background-heading {
+    margin-bottom: 2.5rem;
+}
+
+    .background-heading h2 {
+        margin: 0;
+        font-size: clamp(2.3rem, 4vw, 3.5rem);
+        line-height: 1;
+        letter-spacing: -0.04em;
+    }
+
+.background-list {
+    border-top: 1px solid var(--border);
+}
+
+.background-item {
+    padding: 1.75rem 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.background-item__period {
+    display: block;
+    margin-bottom: 0.6rem;
+    color: var(--accent);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+
+.background-item h3 {
+    margin: 0;
+    color: var(--text);
+    font-size: 1.15rem;
+    line-height: 1.3;
+}
+
+.background-item p {
+    margin: 0.4rem 0 0;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.language-item {
+    position: relative;
+    padding-right: 2rem;
+}
+
+    .language-item::after {
+        content: "●";
+        position: absolute;
+        top: 1.8rem;
+        right: 0;
+        color: var(--accent);
+        font-size: 0.6rem;
+    }
+
+#background {
+    scroll-margin-top: 6rem;
+}
+
+@media (max-width: 750px) {
+    .background-section {
+        grid-template-columns: 1fr;
+        gap: 4rem;
+        padding: 5rem 1.5rem;
+    }
+}

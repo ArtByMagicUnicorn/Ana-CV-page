@@ -1,0 +1,281 @@
+﻿@using Ana_CV_page.Models
+@inject NavigationManager Navigation
+
+<section id="skills" class="admin-section">
+
+    <div class="admin-section-heading">
+        <div>
+            <span class="admin-section-number">03</span>
+            <h2>Skills</h2>
+        </div>
+
+        <p>
+            Manage skills, categories and display order.
+        </p>
+    </div>
+
+    <div class="skills-admin">
+
+        <div class="skills-admin__toolbar">
+            <span>
+                @Skills.Count skills
+            </span>
+
+            <button type="button"
+                    class="admin-add-button"
+                    @onclick="AddSkill">
+                + Add skill
+            </button>
+        </div>
+
+        @if (editingSkill is not null)
+        {
+            <div id="skill-editor"
+                 class="skills-editor">
+
+                <div class="skills-editor__header">
+                    <div>
+                        <span class="admin-section-number">
+                            @(isAddingSkill ? "NEW SKILL" : "EDIT SKILL")
+                        </span>
+
+                        <h3>
+                            @(isAddingSkill
+                                ? "Add skill"
+                                : editingSkill.Name)
+                        </h3>
+                    </div>
+
+                    <button type="button"
+                            class="admin-text-button"
+                            @onclick="CancelSkillEdit">
+                        Close
+                    </button>
+                </div>
+
+                <div class="admin-form-grid">
+
+                    <div class="admin-field">
+                        <label>Skill</label>
+                        <input type="text"
+                               @bind="editingSkill.Name" />
+                    </div>
+
+                    <div class="admin-field">
+                        <label>Category</label>
+                        <input type="text"
+                               @bind="editingSkill.Category" />
+                    </div>
+
+                </div>
+
+                <div class="skills-editor__actions">
+
+                    <button type="button"
+                            class="admin-secondary-button"
+                            @onclick="CancelSkillEdit">
+                        Cancel
+                    </button>
+
+                    <button type="button"
+                            class="admin-save-button"
+                            @onclick="ApplySkill">
+                        Apply changes
+                    </button>
+
+                </div>
+
+            </div>
+        }
+
+        <div class="skills-admin__list">
+
+            @foreach (var skill in Skills.OrderBy(x => x.SortOrder))
+            {
+                <div class="skills-admin__item">
+
+                    <div>
+                        <strong>@skill.Name</strong>
+                        <span>@skill.Category</span>
+                    </div>
+
+                    <div class="skills-admin__actions">
+
+                        <div class="skills-admin__move-actions">
+                            <button type="button"
+                                    class="highlight-button"
+                                    title="Move up"
+                                    disabled="@(skill.SortOrder == Skills.Min(x => x.SortOrder))"
+                                    @onclick="() => MoveSkillUp(skill)">
+                                ↑
+                            </button>
+
+                            <button type="button"
+                                    class="highlight-button"
+                                    title="Move down"
+                                    disabled="@(skill.SortOrder == Skills.Max(x => x.SortOrder))"
+                                    @onclick="() => MoveSkillDown(skill)">
+                                ↓
+                            </button>
+                        </div>
+
+                        <button type="button"
+                                class="admin-text-button"
+                                @onclick="() => EditSkill(skill)">
+                            Edit
+                        </button>
+
+                        <button type="button"
+                                class="admin-text-button admin-text-button--danger"
+                                @onclick="() => DeleteSkill(skill)">
+                            Delete
+                        </button>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</section>
+
+@code {
+    [Parameter, EditorRequired]
+    public List<Skill> Skills { get; set; } = [];
+    private Skill? editingSkill;
+    private Skill? originalSkill;
+    private bool isAddingSkill;
+    private bool scrollToEditor;
+
+    private void AddSkill()
+    {
+        originalSkill = null;
+
+        editingSkill = new Skill
+        {
+            SortOrder = Skills.Count + 1
+        };
+
+        isAddingSkill = true;
+    }
+
+    private void CancelSkillEdit()
+    {
+        editingSkill = null;
+        originalSkill = null;
+        isAddingSkill = false;
+    }
+
+    private void ApplySkill()
+    {
+        if (editingSkill is null)
+            return;
+
+        if (isAddingSkill)
+        {
+            Skills.Add(editingSkill);
+        }
+        else if (originalSkill is not null)
+        {
+            originalSkill.Name = editingSkill.Name;
+            originalSkill.Category = editingSkill.Category;
+            originalSkill.SortOrder = editingSkill.SortOrder;
+        }
+
+        editingSkill = null;
+        originalSkill = null;
+        isAddingSkill = false;
+    }
+
+    private void EditSkill(Skill skill)
+    {
+        originalSkill = skill;
+
+        editingSkill = new Skill
+        {
+            Name = skill.Name,
+            Category = skill.Category,
+            SortOrder = skill.SortOrder
+        };
+
+        isAddingSkill = false;
+        scrollToEditor = true;
+    }
+
+    private void DeleteSkill(Skill skill)
+    {
+        Skills.Remove(skill);
+
+        ReorderSkills();
+
+        if (ReferenceEquals(originalSkill, skill))
+        {
+            editingSkill = null;
+            originalSkill = null;
+            isAddingSkill = false;
+        }
+    }
+
+    private void MoveSkillUp(Skill skill)
+    {
+        var ordered = Skills
+            .OrderBy(x => x.SortOrder)
+            .ToList();
+
+        var index = ordered.IndexOf(skill);
+
+        if (index <= 0)
+            return;
+
+        var previous = ordered[index - 1];
+
+        (skill.SortOrder, previous.SortOrder) =
+            (previous.SortOrder, skill.SortOrder);
+    }
+
+    private void MoveSkillDown(Skill skill)
+    {
+        var ordered = Skills
+            .OrderBy(x => x.SortOrder)
+            .ToList();
+
+        var index = ordered.IndexOf(skill);
+
+        if (index < 0 || index >= ordered.Count - 1)
+            return;
+
+        var next = ordered[index + 1];
+
+        (skill.SortOrder, next.SortOrder) =
+            (next.SortOrder, skill.SortOrder);
+    }
+
+    private void ReorderSkills()
+    {
+        var ordered = Skills
+            .OrderBy(x => x.SortOrder)
+            .ToList();
+
+        for (var i = 0; i < ordered.Count; i++)
+        {
+            ordered[i].SortOrder = i + 1;
+        }
+    }
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (scrollToEditor)
+        {
+            scrollToEditor = false;
+
+            var currentPage = Navigation.Uri.Split('#')[0];
+
+            Navigation.NavigateTo($"{currentPage}#skill-editor");
+        }
+
+        return Task.CompletedTask;
+    }
+}

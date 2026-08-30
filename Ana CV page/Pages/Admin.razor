@@ -1,0 +1,119 @@
+﻿@page "/admin"
+
+@using Ana_CV_page.Models
+@using Ana_CV_page.Services
+@inject CvDataService CvService
+
+<PageTitle>Ana Control Center</PageTitle>
+
+<div class="admin-shell">
+
+    <aside class="admin-sidebar">
+        <div class="admin-brand">
+            <img src="images/camelion.png"
+                 alt="Ana Gheorghe logo"
+                 class="admin-logo" />
+
+            <div>
+                <strong>Ana Control Center</strong>
+                <span>CV management</span>
+            </div>
+        </div>
+
+        <nav class="admin-nav">
+            <a href="#profile">Profile</a>
+            <a href="#experience">Experience</a>
+            <a href="#skills">Skills</a>
+            <a href="#background">Background</a>
+            <a href="#beyond">Beyond the Numbers</a>
+            <a href="#media">Media</a>
+        </nav>
+
+        <a href="/" class="admin-view-site">
+            ← View public site
+        </a>
+    </aside>
+
+    <main class="admin-content">
+
+        <header class="admin-header">
+            <div>
+                <p class="admin-eyebrow">Dashboard</p>
+                <h1>Welcome, Ana</h1>
+                <p>
+                    Update the content of your CV without touching the code.
+                </p>
+            </div>
+        </header>
+
+        <ProfileEditor Profile="@cv.Profile" />
+
+        <ExperienceEditor Experiences="@cv.Experiences" />
+
+        <SkillsEditor Skills="@cv.Skills" />
+
+        <section id="background" class="admin-section">
+            <div class="admin-section-heading">
+                <div>
+                    <span class="admin-section-number">04</span>
+                    <h2>Background</h2>
+                </div>
+
+                <p>
+                    Education, languages and certifications.
+                </p>
+            </div>
+
+            <div class="admin-placeholder">
+                Background editor
+            </div>
+        </section>
+
+        <section id="beyond" class="admin-section">
+            <div class="admin-section-heading">
+                <div>
+                    <span class="admin-section-number">05</span>
+                    <h2>Beyond the Numbers</h2>
+                </div>
+
+                <p>
+                    Personal presentation, interests and values.
+                </p>
+            </div>
+
+            <div class="admin-placeholder">
+                Beyond the Numbers editor
+            </div>
+        </section>
+
+        <section id="media" class="admin-section">
+            <div class="admin-section-heading">
+                <div>
+                    <span class="admin-section-number">06</span>
+                    <h2>Media</h2>
+                </div>
+
+                <p>
+                    Profile images and introduction video.
+                </p>
+            </div>
+
+            <div class="admin-placeholder">
+                Media editor
+            </div>
+        </section>
+
+    </main>
+
+</div>
+
+@code {
+    private CvData cv = new();
+
+    protected override void OnInitialized()
+    {
+        cv = CvService.GetCv();
+    }
+
+  
+}

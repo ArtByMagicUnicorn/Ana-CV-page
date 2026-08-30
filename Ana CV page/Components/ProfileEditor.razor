@@ -1,0 +1,116 @@
+﻿@using Ana_CV_page.Models
+
+<section id="profile" class="admin-section">
+
+    <div class="admin-section-heading">
+        <div>
+            <span class="admin-section-number">01</span>
+            <h2>Profile</h2>
+        </div>
+
+        <p>
+            Personal details, professional title and introduction.
+        </p>
+    </div>
+
+    <div class="admin-card">
+
+        <div class="admin-form-grid">
+
+            <div class="admin-field">
+                <label for="firstName">First name</label>
+                <input id="firstName"
+                       type="text"
+                       @bind="Profile.FirstName" />
+            </div>
+
+            <div class="admin-field">
+                <label for="lastName">Last name</label>
+                <input id="lastName"
+                       type="text"
+                       @bind="Profile.LastName" />
+            </div>
+
+            <div class="admin-field admin-field--full">
+                <label for="title">Professional title</label>
+                <input id="title"
+                       type="text"
+                       @bind="Profile.ProfessionalTitle" />
+            </div>
+
+            <div class="admin-field admin-field--full">
+                <label for="summaryEnglish">English summary</label>
+                <textarea id="summaryEnglish"
+                          rows="5"
+                          @bind="Profile.SummaryEnglish"></textarea>
+            </div>
+
+            <div class="admin-field admin-field--full">
+                <label for="summarySwedish">Swedish summary</label>
+                <textarea id="summarySwedish"
+                          rows="5"
+                          @bind="Profile.SummarySwedish"></textarea>
+            </div>
+
+            <div class="admin-field">
+                <label for="location">Location</label>
+                <input id="location"
+                       type="text"
+                       @bind="Profile.Location" />
+            </div>
+
+            <div class="admin-field">
+                <label for="workMode">Preferred work mode</label>
+                <input id="workMode"
+                       type="text"
+                       @bind="Profile.PreferredWorkMode" />
+            </div>
+
+            <div class="admin-field">
+                <label for="email">Email</label>
+                <input id="email"
+                       type="email"
+                       @bind="Profile.Email" />
+            </div>
+
+            <div class="admin-field">
+                <label for="linkedin">LinkedIn</label>
+                <input id="linkedin"
+                       type="url"
+                       @bind="Profile.LinkedInUrl" />
+            </div>
+
+            <div class="admin-field admin-field--full">
+                <label class="admin-checkbox">
+                    <input type="checkbox"
+                           @bind="Profile.OpenToWork" />
+
+                    <span>
+                        <strong>Open to opportunities</strong>
+                        <small>Show availability on the public CV.</small>
+                    </span>
+                </label>
+            </div>
+
+        </div>
+
+        <div class="admin-form-actions">
+            <span class="admin-form-note">
+                Changes are not saved yet.
+            </span>
+
+            <button type="button"
+                    class="admin-save-button"
+                    disabled>
+                Save changes
+            </button>
+        </div>
+
+    </div>
+
+</section>
+
+@code {
+    [Parameter, EditorRequired]
+    public Profile Profile { get; set; } = new();
+}

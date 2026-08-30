@@ -1,0 +1,394 @@
+﻿@using Ana_CV_page.Models
+
+<section id="experience" class="admin-section">
+    <div class="admin-section-heading">
+        <div>
+            <span class="admin-section-number">02</span>
+            <h2>Experience</h2>
+        </div>
+
+        <p>
+            Add, edit and reorder work experience.
+        </p>
+    </div>
+
+    <div class="experience-admin">
+
+        <div class="experience-admin__toolbar">
+            <span>
+                @Experiences.Count positions
+            </span>
+
+            <button type="button"
+                    class="admin-add-button"
+                    @onclick="AddExperience">
+                + Add experience
+            </button>
+        </div>
+
+        @if (editingExperience is not null)
+        {
+            <div class="experience-editor">
+
+                <div class="experience-editor__header">
+                    <div>
+                        <span class="admin-section-number">
+                            @(isAddingExperience ? "NEW POSITION" : "EDIT POSITION")
+                        </span>
+
+                        <h3>
+                            @(isAddingExperience
+                                ? "Add experience"
+                                : editingExperience.JobTitle)
+                        </h3>
+                    </div>
+
+                    <button type="button"
+                            class="admin-text-button"
+                            @onclick="CancelExperienceEdit">
+                        Close
+                    </button>
+                </div>
+
+                <div class="admin-form-grid">
+
+                    <div class="admin-field">
+                        <label>Job title</label>
+                        <input type="text"
+                               @bind="editingExperience.JobTitle" />
+                    </div>
+
+                    <div class="admin-field">
+                        <label>Company</label>
+                        <input type="text"
+                               @bind="editingExperience.Company" />
+                    </div>
+
+                    <div class="admin-field">
+                        <label>Location</label>
+                        <input type="text"
+                               @bind="editingExperience.Location" />
+                    </div>
+
+                    <div class="admin-field">
+                        <label>Work mode</label>
+                        <input type="text"
+                               @bind="editingExperience.WorkMode" />
+                    </div>
+
+                    <div class="admin-field">
+                        <label>Start date</label>
+                        <InputDate @bind-Value="editingExperience.StartDate" />
+                    </div>
+
+                    <div class="admin-field">
+                        <label>End date</label>
+
+                        @if (!editingExperience.IsCurrent)
+                        {
+                            <InputDate @bind-Value="editingExperience.EndDate" />
+                        }
+                        else
+                        {
+                            <input type="text"
+                                   value="Present"
+                                   disabled />
+                        }
+                    </div>
+
+                    <div class="admin-field admin-field--full">
+                        <label class="admin-checkbox">
+                            <input type="checkbox"
+                                   @bind="editingExperience.IsCurrent" />
+
+                            <span>
+                                <strong>Current position</strong>
+                                <small>
+                                    This position will be shown as ongoing.
+                                </small>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="admin-field admin-field--full">
+                        <label>Description</label>
+
+                        <textarea rows="4"
+                                  @bind="editingExperience.Description">
+                    </textarea>
+                    </div>
+
+                    <div class="admin-field admin-field--full">
+                        <label>Highlights</label>
+
+                        <div class="highlight-editor">
+
+                            @for (var i = 0; i < editingExperience.Highlights.Count; i++)
+                            {
+                                var index = i;
+
+                                <div class="highlight-editor__item">
+
+                                    <input type="text"
+                                           value="@editingExperience.Highlights[index]"
+                                           @oninput="e => UpdateHighlight(index, e.Value?.ToString())" />
+
+                                    <div class="highlight-editor__actions">
+
+                                        <button type="button"
+                                                class="highlight-button"
+                                                title="Move up"
+                                                disabled="@(index == 0)"
+                                                @onclick="() => MoveHighlightUp(index)">
+                                            ↑
+                                        </button>
+
+                                        <button type="button"
+                                                class="highlight-button"
+                                                title="Move down"
+                                                disabled="@(index == editingExperience.Highlights.Count - 1)"
+                                                @onclick="() => MoveHighlightDown(index)">
+                                            ↓
+                                        </button>
+
+                                        <button type="button"
+                                                class="highlight-button highlight-button--danger"
+                                                title="Delete highlight"
+                                                @onclick="() => DeleteHighlight(index)">
+                                            ×
+                                        </button>
+
+                                    </div>
+
+                                </div>
+                            }
+
+                            <button type="button"
+                                    class="highlight-add-button"
+                                    @onclick="AddHighlight">
+                                + Add highlight
+                            </button>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="experience-editor__actions">
+                    <button type="button"
+                            class="admin-secondary-button"
+                            @onclick="CancelExperienceEdit">
+                        Cancel
+                    </button>
+
+                    <button type="button"
+                            class="admin-save-button"
+                            @onclick="ApplyExperience">
+                        Apply changes
+                    </button>
+                </div>
+
+            </div>
+        }
+
+        <div class="experience-admin__list">
+
+            @foreach (var experience in Experiences
+    .OrderBy(x => x.SortOrder))
+            {
+                <article class="experience-admin__item">
+
+                    <div class="experience-admin__position">
+
+                        <span class="experience-admin__order">
+                            @experience.SortOrder.ToString("00")
+                        </span>
+
+                        <div>
+                            <h3>@experience.JobTitle</h3>
+
+                            <p>
+                                @experience.Company
+                                @if (!string.IsNullOrWhiteSpace(experience.Location))
+                                {
+                                    <span> · @experience.Location</span>
+                                }
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="experience-admin__actions">
+
+                        @if (experience.IsCurrent)
+                        {
+                            <span class="experience-admin__current">
+                                Current
+                            </span>
+                        }
+
+                        <button type="button"
+                                class="admin-text-button"
+                                @onclick="() => EditExperience(experience)">
+                            Edit
+                        </button>
+
+                        <button type="button"
+                                class="admin-text-button admin-text-button--danger"
+                                @onclick="() => DeleteExperience(experience)">
+                            Delete
+                        </button>
+
+                    </div>
+
+                </article>
+            }
+
+        </div>
+
+    </div>
+</section>
+
+@code {
+
+    [Parameter, EditorRequired]
+    public List<Ana_CV_page.Models.Experience> Experiences { get; set; } = [];
+
+    private Ana_CV_page.Models.Experience? editingExperience;
+    private Ana_CV_page.Models.Experience? originalExperience;
+    private bool isAddingExperience;
+
+    private void EditExperience(Ana_CV_page.Models.Experience experience)
+    {
+        originalExperience = experience;
+
+        editingExperience = new Ana_CV_page.Models.Experience
+        {
+            JobTitle = experience.JobTitle,
+            Company = experience.Company,
+            Location = experience.Location,
+            WorkMode = experience.WorkMode,
+            StartDate = experience.StartDate,
+            EndDate = experience.EndDate,
+            IsCurrent = experience.IsCurrent,
+            Description = experience.Description,
+            Highlights = new List<string>(experience.Highlights),
+            SortOrder = experience.SortOrder
+        };
+
+        isAddingExperience = false;
+    }
+
+    private void AddExperience()
+    {
+        originalExperience = null;
+
+        editingExperience = new Ana_CV_page.Models.Experience
+        {
+            StartDate = DateOnly.FromDateTime(DateTime.Today),
+            SortOrder = Experiences.Count + 1
+        };
+
+        isAddingExperience = true;
+    }
+
+    private void CancelExperienceEdit()
+    {
+        editingExperience = null;
+        originalExperience = null;
+        isAddingExperience = false;
+    }
+
+    private void ApplyExperience()
+    {
+        if (editingExperience is null)
+            return;
+
+        if (isAddingExperience)
+        {
+            Experiences.Add(editingExperience);
+        }
+        else if (originalExperience is not null)
+        {
+            originalExperience.JobTitle = editingExperience.JobTitle;
+            originalExperience.Company = editingExperience.Company;
+            originalExperience.Location = editingExperience.Location;
+            originalExperience.WorkMode = editingExperience.WorkMode;
+            originalExperience.StartDate = editingExperience.StartDate;
+            originalExperience.EndDate = editingExperience.EndDate;
+            originalExperience.IsCurrent = editingExperience.IsCurrent;
+            originalExperience.Description = editingExperience.Description;
+            originalExperience.Highlights = new List<string>(editingExperience.Highlights);
+            originalExperience.SortOrder = editingExperience.SortOrder;
+        }
+
+        editingExperience = null;
+        originalExperience = null;
+        isAddingExperience = false;
+    }
+
+    private void DeleteExperience(Ana_CV_page.Models.Experience experience)
+    {
+        Experiences.Remove(experience);
+
+        if (ReferenceEquals(originalExperience, experience))
+        {
+            editingExperience = null;
+            originalExperience = null;
+            isAddingExperience = false;
+        }
+    }
+
+    private void AddHighlight()
+    {
+        if (editingExperience is null)
+            return;
+
+        editingExperience.Highlights.Add(string.Empty);
+    }
+
+    private void UpdateHighlight(int index, string? value)
+    {
+        if (editingExperience is null)
+            return;
+
+        if (index < 0 || index >= editingExperience.Highlights.Count)
+            return;
+
+        editingExperience.Highlights[index] = value ?? string.Empty;
+    }
+
+    private void DeleteHighlight(int index)
+    {
+        if (editingExperience is null)
+            return;
+
+        if (index < 0 || index >= editingExperience.Highlights.Count)
+            return;
+
+        editingExperience.Highlights.RemoveAt(index);
+    }
+
+    private void MoveHighlightUp(int index)
+    {
+        if (editingExperience is null || index <= 0)
+            return;
+
+        var highlights = editingExperience.Highlights;
+
+        (highlights[index - 1], highlights[index]) =
+            (highlights[index], highlights[index - 1]);
+    }
+
+    private void MoveHighlightDown(int index)
+    {
+        if (editingExperience is null ||
+            index >= editingExperience.Highlights.Count - 1)
+            return;
+
+        var highlights = editingExperience.Highlights;
+
+        (highlights[index + 1], highlights[index]) =
+            (highlights[index], highlights[index + 1]);
+    }
+    }

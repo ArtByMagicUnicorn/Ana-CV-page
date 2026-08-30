@@ -1,0 +1,177 @@
+/* CSS for Admin component */
+.admin-shell {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 17rem 1fr;
+    background: #f5f3ef;
+}
+
+.admin-sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 1.5rem;
+    background: #242321;
+    color: white;
+}
+
+.admin-brand {
+    display: flex;
+    align-items: center;
+    gap: .85rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, .12);
+}
+
+.admin-logo {
+    width: 2.75rem;
+    height: 2.75rem;
+    object-fit: contain;
+}
+
+.admin-brand div {
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-brand strong {
+    font-size: .95rem;
+}
+
+.admin-brand span {
+    margin-top: .15rem;
+    color: rgba(255, 255, 255, .55);
+    font-size: .75rem;
+}
+
+.admin-nav {
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+    margin-top: 2rem;
+}
+
+    .admin-nav a {
+        padding: .75rem .9rem;
+        border-radius: .6rem;
+        color: rgba(255, 255, 255, .72);
+        text-decoration: none;
+        transition: background .2s ease, color .2s ease;
+    }
+
+        .admin-nav a:hover {
+            background: rgba(255, 255, 255, .08);
+            color: white;
+        }
+
+.admin-view-site {
+    margin-top: auto;
+    color: rgba(255, 255, 255, .65);
+    text-decoration: none;
+    font-size: .9rem;
+}
+
+    .admin-view-site:hover {
+        color: white;
+    }
+
+.admin-content {
+    width: min(100%, 1100px);
+    margin: 0 auto;
+    padding: 4rem;
+}
+
+.admin-header {
+    margin-bottom: 4rem;
+}
+
+.admin-eyebrow {
+    margin: 0 0 .5rem;
+    color: var(--accent);
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+}
+
+.admin-header h1 {
+    margin: 0;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    line-height: 1;
+}
+
+.admin-header p:last-child {
+    max-width: 38rem;
+    margin-top: 1rem;
+    color: var(--text-muted);
+}
+
+.admin-placeholder {
+    min-height: 10rem;
+    display: grid;
+    place-items: center;
+    padding: 2rem;
+    border: 1px dashed var(--border);
+    border-radius: 1rem;
+    background: white;
+    color: var(--text-muted);
+}
+
+.admin-text-button {
+    padding: .35rem;
+    border: 0;
+    background: transparent;
+    color: var(--accent);
+    font-size: .8rem;
+    font-weight: 650;
+}
+
+.admin-text-button--danger {
+    color: #a14f4f;
+}
+
+
+
+.admin-secondary-button {
+    padding: .8rem 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: .65rem;
+    background: white;
+    color: var(--text);
+    font-weight: 650;
+}
+
+
+
+
+
+
+@media (max-width: 850px) {
+
+    .admin-shell {
+        display: block;
+    }
+
+    .admin-sidebar {
+        position: relative;
+        height: auto;
+    }
+
+    .admin-nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .admin-view-site {
+        margin-top: 2rem;
+    }
+
+    .admin-content {
+        padding: 2rem 1.25rem;
+    }
+}
+
+
+

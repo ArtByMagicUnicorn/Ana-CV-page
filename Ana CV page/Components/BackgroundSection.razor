@@ -1,0 +1,66 @@
+﻿@using Ana_CV_page.Models
+
+<section class="background-section">
+
+    <div id="background" class="background-column">
+
+        <div class="background-heading">
+            <p class="eyebrow">Background</p>
+            <h2>Education</h2>
+        </div>
+
+        <div class="background-list">
+            @foreach (var education in Education.OrderBy(x => x.SortOrder))
+            {
+                <article class="background-item">
+
+                    <span class="background-item__period">
+                        @education.StartYear — @education.EndYear
+                    </span>
+
+                    <h3>@education.Program</h3>
+
+                    <p>
+                        @education.School
+                    </p>
+
+                </article>
+            }
+        </div>
+
+    </div>
+
+
+    <div id="languages" class="background-column">
+
+        <div class="background-heading">
+            <p class="eyebrow">Communication</p>
+            <h2>Languages</h2>
+        </div>
+
+        <div class="background-list">
+            @foreach (var language in Languages.OrderBy(x => x.SortOrder))
+            {
+                <article class="background-item language-item">
+
+                    <h3>@language.Name</h3>
+
+                    <p>
+                        @language.Proficiency
+                    </p>
+
+                </article>
+            }
+        </div>
+
+    </div>
+
+</section>
+
+@code {
+    [Parameter, EditorRequired]
+    public IEnumerable<Education> Education { get; set; } = [];
+
+    [Parameter, EditorRequired]
+    public IEnumerable<Language> Languages { get; set; } = [];
+}

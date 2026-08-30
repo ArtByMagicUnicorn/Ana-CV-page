@@ -1,0 +1,80 @@
+﻿@using Ana_CV_page.Models
+
+<section id="skills" class="skills-section">
+
+    <div class="skills-section__heading">
+        <p class="eyebrow">Expertise & Systems</p>
+
+        <h2>
+            Finance knowledge.<br />
+            <span>Systems mindset.</span>
+        </h2>
+
+        <p>
+            A combination of accounting experience, financial systems
+            knowledge and a strong interest in smarter, more efficient
+            finance processes.
+        </p>
+    </div>
+
+    <div class="skills-section__grid">
+
+        @foreach (var group in SkillGroups)
+        {
+            <article class="skill-group">
+
+                <div class="skill-group__header">
+                    <span class="skill-group__number">
+                        @GetGroupNumber(group.Key)
+                    </span>
+
+                    <h3>@group.Key</h3>
+                </div>
+
+                <div class="skill-group__items">
+                    @foreach (var skill in group.OrderBy(x => x.SortOrder))
+                    {
+                        <span class="skill">
+                            @skill.Name
+                        </span>
+                    }
+                </div>
+
+            </article>
+        }
+
+    </div>
+
+</section>
+
+@code {
+    [Parameter, EditorRequired]
+    public IEnumerable<Skill> Skills { get; set; } = [];
+
+    private IEnumerable<IGrouping<string, Skill>> SkillGroups =>
+        Skills
+            .GroupBy(x => x.Category)
+            .OrderBy(x => GetCategoryOrder(x.Key));
+
+    private static int GetCategoryOrder(string category)
+    {
+        return category switch
+        {
+            "Core Skills" => 1,
+            "ERP & Financial Systems" => 2,
+            "AP & Invoice Automation" => 3,
+            _ => 99
+        };
+    }
+
+    private static string GetGroupNumber(string category)
+    {
+        return GetCategoryOrder(category) switch
+        {
+            1 => "01",
+            2 => "02",
+            3 => "03",
+            _ => "•"
+        };
+    }
+}
