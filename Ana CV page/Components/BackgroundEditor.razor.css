@@ -1,0 +1,142 @@
+/* CSS for BackgroundEditor component */
+.background-admin {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.background-admin__group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.background-admin__group-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 0.9rem;
+}
+
+    .background-admin__group-header > div {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+    }
+
+    .background-admin__group-header h3 {
+        margin: 0;
+        font-size: 1.05rem;
+    }
+
+.background-admin__list {
+    display: grid;
+    gap: 0.65rem;
+}
+
+.background-admin__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1rem 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 0.9rem;
+}
+
+.background-admin__item-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+}
+
+    .background-admin__item-content strong {
+        color: var(--text);
+        font-size: 0.95rem;
+    }
+
+    .background-admin__item-content span {
+        color: var(--text-muted);
+        font-size: 0.85rem;
+    }
+
+    .background-admin__item-content small {
+        color: var(--text-muted);
+        font-size: 0.78rem;
+    }
+
+.background-admin__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+}
+
+/* Editor */
+
+.background-editor {
+    padding: 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 0.9rem;
+}
+
+.background-editor__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+    .background-editor__header h3 {
+        margin: 0.2rem 0 0;
+        font-size: 1.1rem;
+    }
+
+.background-editor__actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+}
+
+.background-admin__move-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+    .background-admin__group-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .background-admin__item {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .background-admin__actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .background-editor__header {
+        align-items: flex-start;
+    }
+
+    .background-editor__actions {
+        flex-wrap: wrap;
+    }
+}

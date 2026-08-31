@@ -1,0 +1,304 @@
+﻿@using Ana_CV_page.Models
+
+@inject NavigationManager Navigation
+
+<section id="background" class="admin-section">
+
+    <div class="admin-section-heading">
+        <div>
+            <span class="admin-section-number">04</span>
+            <h2>Background</h2>
+        </div>
+
+        <p>
+            Education, languages and certifications.
+        </p>
+    </div>
+
+    <div class="background-admin">
+
+        <div class="background-admin__group">
+
+            <div class="background-admin__group-header">
+                <div>
+                    <span class="admin-section-number">EDUCATION</span>
+                    <h3>Education</h3>
+                </div>
+
+                <button type="button"
+                        class="admin-add-button"
+                        @onclick="AddEducation">
+                    + Add education
+                </button>
+            </div>
+
+            @if (editingEducation is not null)
+            {
+                <div id="education-editor" class="background-editor">
+
+                    <div class="background-editor__header">
+                        <div>
+                            <span class="admin-section-number">
+                                @(isAddingEducation ? "NEW EDUCATION" : "EDIT EDUCATION")
+                            </span>
+
+                            <h3>
+                                @(isAddingEducation
+                                    ? "Add education"
+                                    : editingEducation.Program)
+                            </h3>
+                        </div>
+
+                        <button type="button"
+                                class="admin-text-button"
+                                @onclick="CancelEducationEdit">
+                            Close
+                        </button>
+                    </div>
+
+                    <div class="admin-form-grid">
+
+                        <div class="admin-field">
+                            <label>School</label>
+                            <input type="text"
+                                   @bind="editingEducation.School" />
+                        </div>
+
+                        <div class="admin-field">
+                            <label>Program</label>
+                            <input type="text"
+                                   @bind="editingEducation.Program" />
+                        </div>
+
+                        <div class="admin-field">
+                            <label>Start year</label>
+                            <input type="number"
+                                   @bind="editingEducation.StartYear" />
+                        </div>
+
+                        <div class="admin-field">
+                            <label>End year</label>
+                            <input type="number"
+                                   @bind="editingEducation.EndYear" />
+                        </div>
+
+                    </div>
+
+                    <div class="background-editor__actions">
+
+                        <button type="button"
+                                class="admin-secondary-button"
+                                @onclick="CancelEducationEdit">
+                            Cancel
+                        </button>
+
+                        <button type="button"
+                                class="admin-save-button"
+                                @onclick="ApplyEducation">
+                            Apply changes
+                        </button>
+
+                    </div>
+
+                </div>
+            }
+
+            <div class="background-admin__list">
+
+                @foreach (var education in Education.OrderBy(x => x.SortOrder))
+                {
+                    <div class="background-admin__item">
+
+                        <div class="background-admin__item-content">
+                            <strong>@education.Program</strong>
+                            <span>@education.School</span>
+                            <small>
+                                @education.StartYear – @education.EndYear
+                            </small>
+                        </div>
+
+                        <div class="background-admin__actions">
+
+                            <div class="background-admin__move-actions">
+
+                                <button type="button"
+                                        class="highlight-button"
+                                        title="Move up"
+                                        disabled="@(education == Education.OrderBy(x => x.SortOrder).First())"
+                                        @onclick="() => MoveEducationUp(education)">
+                                    ↑
+                                </button>
+
+                                <button type="button"
+                                        class="highlight-button"
+                                        title="Move down"
+                                        disabled="@(education == Education.OrderBy(x => x.SortOrder).Last())"
+                                        @onclick="() => MoveEducationDown(education)">
+                                    ↓
+                                </button>
+
+                            </div>
+
+                            <button type="button"
+                                    class="admin-text-button"
+                                    @onclick="() => EditEducation(education)">
+                                Edit
+                            </button>
+
+                            <button type="button"
+                                    class="admin-text-button admin-text-button--danger"
+                                    @onclick="() => DeleteEducation(education)">
+                                Delete
+                            </button>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+@code {
+    [Parameter, EditorRequired]
+    public List<Education> Education { get; set; } = [];
+
+    private Education? editingEducation;
+    private Education? originalEducation;
+    private bool isAddingEducation;
+    private bool scrollToEducationEditor;
+
+    private void AddEducation()
+    {
+        originalEducation = null;
+
+        editingEducation = new Education
+        {
+            StartYear = DateTime.Today.Year,
+            EndYear = DateTime.Today.Year,
+            SortOrder = Education.Count + 1
+        };
+
+        isAddingEducation = true;
+        scrollToEducationEditor = true;
+    }
+
+    private void EditEducation(Education education)
+    {
+        originalEducation = education;
+
+        editingEducation = new Education
+        {
+            School = education.School,
+            Program = education.Program,
+            StartYear = education.StartYear,
+            EndYear = education.EndYear,
+            SortOrder = education.SortOrder
+        };
+
+        isAddingEducation = false;
+        scrollToEducationEditor = true;
+    }
+
+    private void CancelEducationEdit()
+    {
+        editingEducation = null;
+        originalEducation = null;
+        isAddingEducation = false;
+    }
+
+    private void ApplyEducation()
+    {
+        if (editingEducation is null)
+            return;
+
+        if (isAddingEducation)
+        {
+            Education.Add(editingEducation);
+        }
+        else if (originalEducation is not null)
+        {
+            originalEducation.School = editingEducation.School;
+            originalEducation.Program = editingEducation.Program;
+            originalEducation.StartYear = editingEducation.StartYear;
+            originalEducation.EndYear = editingEducation.EndYear;
+            originalEducation.SortOrder = editingEducation.SortOrder;
+        }
+
+        editingEducation = null;
+        originalEducation = null;
+        isAddingEducation = false;
+    }
+
+    private void DeleteEducation(Education education)
+    {
+        Education.Remove(education);
+        ReorderEducation();
+
+        if (ReferenceEquals(originalEducation, education))
+        {
+            editingEducation = null;
+            originalEducation = null;
+            isAddingEducation = false;
+        }
+    }
+
+    private void MoveEducationUp(Education education)
+    {
+        var ordered = Education.OrderBy(x => x.SortOrder).ToList();
+        var index = ordered.IndexOf(education);
+
+        if (index <= 0)
+            return;
+
+        var previous = ordered[index - 1];
+
+        (education.SortOrder, previous.SortOrder) =
+            (previous.SortOrder, education.SortOrder);
+    }
+
+    private void MoveEducationDown(Education education)
+    {
+        var ordered = Education.OrderBy(x => x.SortOrder).ToList();
+        var index = ordered.IndexOf(education);
+
+        if (index < 0 || index >= ordered.Count - 1)
+            return;
+
+        var next = ordered[index + 1];
+
+        (education.SortOrder, next.SortOrder) =
+            (next.SortOrder, education.SortOrder);
+    }
+
+    private void ReorderEducation()
+    {
+        var ordered = Education
+            .OrderBy(x => x.SortOrder)
+            .ToList();
+
+        for (var i = 0; i < ordered.Count; i++)
+        {
+            ordered[i].SortOrder = i + 1;
+        }
+    }
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (scrollToEducationEditor)
+        {
+            scrollToEducationEditor = false;
+
+            var currentPage = Navigation.Uri.Split('#')[0];
+
+            Navigation.NavigateTo($"{currentPage}#education-editor");
+        }
+
+        return Task.CompletedTask;
+    }
+}
