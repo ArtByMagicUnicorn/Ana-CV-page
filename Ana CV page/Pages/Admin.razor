@@ -21,12 +21,12 @@
         </div>
 
         <nav class="admin-nav">
-            <a href="#profile">Profile</a>
-            <a href="#experience">Experience</a>
-            <a href="#skills">Skills</a>
-            <a href="#background">Background</a>
-            <a href="#beyond">Beyond the Numbers</a>
-            <a href="#media">Media</a>
+            <a href="/admin#profile">Profile</a>
+            <a href="/admin#experience">Experience</a>
+            <a href="/admin#skills">Skills</a>
+            <a href="/admin#background">Background</a>
+            <a href="/admin#beyond">Beyond the Numbers</a>
+            <a href="/admin#media">Media</a>
         </nav>
 
         <a href="/" class="admin-view-site">
@@ -52,7 +52,8 @@
 
         <SkillsEditor Skills="@cv.Skills" />
 
-        <BackgroundEditor Education="@cv.Education" />
+        <BackgroundEditor Education="@cv.Education"
+                          Languages="@cv.Languages" />
 
         <section id="beyond" class="admin-section">
             <div class="admin-section-heading">

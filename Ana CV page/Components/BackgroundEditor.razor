@@ -160,6 +160,134 @@
 
         </div>
 
+        <div class="background-admin__group">
+
+            <div class="background-admin__group-header">
+                <div>
+                    <span class="admin-section-number">LANGUAGES</span>
+                    <h3>Languages</h3>
+                </div>
+
+                <button type="button"
+                        class="admin-add-button"
+                        @onclick="AddLanguage">
+                    + Add language
+                </button>
+            </div>
+
+            @if (editingLanguage is not null)
+            {
+                <div id="language-editor" class="background-editor">
+
+                    <div class="background-editor__header">
+                        <div>
+                            <span class="admin-section-number">
+                                @(isAddingLanguage ? "NEW LANGUAGE" : "EDIT LANGUAGE")
+                            </span>
+
+                            <h3>
+                                @(isAddingLanguage
+                                    ? "Add language"
+                                    : editingLanguage.Name)
+                            </h3>
+                        </div>
+
+                        <button type="button"
+                                class="admin-text-button"
+                                @onclick="CancelLanguageEdit">
+                            Close
+                        </button>
+                    </div>
+
+                    <div class="admin-form-grid">
+
+                        <div class="admin-field">
+                            <label>Language</label>
+                            <input type="text"
+                                   @bind="editingLanguage.Name" />
+                        </div>
+
+                        <div class="admin-field">
+                            <label>Proficiency</label>
+                            <input type="text"
+                                   @bind="editingLanguage.Proficiency" />
+                        </div>
+
+                    </div>
+
+                    <div class="background-editor__actions">
+
+                        <button type="button"
+                                class="admin-secondary-button"
+                                @onclick="CancelLanguageEdit">
+                            Cancel
+                        </button>
+
+                        <button type="button"
+                                class="admin-save-button"
+                                @onclick="ApplyLanguage">
+                            Apply changes
+                        </button>
+
+                    </div>
+
+                </div>
+            }
+
+            <div class="background-admin__list">
+
+                @foreach (var language in Languages.OrderBy(x => x.SortOrder))
+                {
+                    <div class="background-admin__item">
+
+                        <div class="background-admin__item-content">
+                            <strong>@language.Name</strong>
+                            <span>@language.Proficiency</span>
+                        </div>
+
+                        <div class="background-admin__actions">
+
+                            <div class="background-admin__move-actions">
+
+                                <button type="button"
+                                        class="highlight-button"
+                                        title="Move up"
+                                        disabled="@(language == Languages.OrderBy(x => x.SortOrder).First())"
+                                        @onclick="() => MoveLanguageUp(language)">
+                                    ↑
+                                </button>
+
+                                <button type="button"
+                                        class="highlight-button"
+                                        title="Move down"
+                                        disabled="@(language == Languages.OrderBy(x => x.SortOrder).Last())"
+                                        @onclick="() => MoveLanguageDown(language)">
+                                    ↓
+                                </button>
+
+                            </div>
+
+                            <button type="button"
+                                    class="admin-text-button"
+                                    @onclick="() => EditLanguage(language)">
+                                Edit
+                            </button>
+
+                            <button type="button"
+                                    class="admin-text-button admin-text-button--danger"
+                                    @onclick="() => DeleteLanguage(language)">
+                                Delete
+                            </button>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+
     </div>
 
 </section>
@@ -168,10 +296,18 @@
     [Parameter, EditorRequired]
     public List<Education> Education { get; set; } = [];
 
+    [Parameter, EditorRequired]
+    public List<Language> Languages { get; set; } = [];
+
     private Education? editingEducation;
     private Education? originalEducation;
     private bool isAddingEducation;
     private bool scrollToEducationEditor;
+
+    private Language? editingLanguage;
+    private Language? originalLanguage;
+    private bool isAddingLanguage;
+    private bool scrollToLanguageEditor;
 
     private void AddEducation()
     {
@@ -288,6 +424,113 @@
         }
     }
 
+    private void AddLanguage()
+    {
+        originalLanguage = null;
+
+        editingLanguage = new Language
+        {
+            SortOrder = Languages.Count + 1
+        };
+
+        isAddingLanguage = true;
+    }
+
+    private void EditLanguage(Language language)
+    {
+        originalLanguage = language;
+
+        editingLanguage = new Language
+        {
+            Name = language.Name,
+            Proficiency = language.Proficiency,
+            SortOrder = language.SortOrder
+        };
+
+        isAddingLanguage = false;
+    }
+
+    private void CancelLanguageEdit()
+    {
+        editingLanguage = null;
+        originalLanguage = null;
+        isAddingLanguage = false;
+    }
+
+    private void ApplyLanguage()
+    {
+        if (editingLanguage is null)
+            return;
+
+        if (isAddingLanguage)
+        {
+            Languages.Add(editingLanguage);
+        }
+        else if (originalLanguage is not null)
+        {
+            originalLanguage.Name = editingLanguage.Name;
+            originalLanguage.Proficiency = editingLanguage.Proficiency;
+            originalLanguage.SortOrder = editingLanguage.SortOrder;
+        }
+
+        editingLanguage = null;
+        originalLanguage = null;
+        isAddingLanguage = false;
+    }
+
+    private void DeleteLanguage(Language language)
+    {
+        Languages.Remove(language);
+        ReorderLanguages();
+
+        if (ReferenceEquals(originalLanguage, language))
+        {
+            editingLanguage = null;
+            originalLanguage = null;
+            isAddingLanguage = false;
+        }
+    }
+
+    private void MoveLanguageUp(Language language)
+    {
+        var ordered = Languages.OrderBy(x => x.SortOrder).ToList();
+        var index = ordered.IndexOf(language);
+
+        if (index <= 0)
+            return;
+
+        var previous = ordered[index - 1];
+
+        (language.SortOrder, previous.SortOrder) =
+            (previous.SortOrder, language.SortOrder);
+    }
+
+    private void MoveLanguageDown(Language language)
+    {
+        var ordered = Languages.OrderBy(x => x.SortOrder).ToList();
+        var index = ordered.IndexOf(language);
+
+        if (index < 0 || index >= ordered.Count - 1)
+            return;
+
+        var next = ordered[index + 1];
+
+        (language.SortOrder, next.SortOrder) =
+            (next.SortOrder, language.SortOrder);
+    }
+
+    private void ReorderLanguages()
+    {
+        var ordered = Languages
+            .OrderBy(x => x.SortOrder)
+            .ToList();
+
+        for (var i = 0; i < ordered.Count; i++)
+        {
+            ordered[i].SortOrder = i + 1;
+        }
+    }
+
     protected override Task OnAfterRenderAsync(bool firstRender)
     {
         if (scrollToEducationEditor)
@@ -297,6 +540,15 @@
             var currentPage = Navigation.Uri.Split('#')[0];
 
             Navigation.NavigateTo($"{currentPage}#education-editor");
+        }
+
+        if (scrollToLanguageEditor)
+        {
+            scrollToLanguageEditor = false;
+
+            var currentPage = Navigation.Uri.Split('#')[0];
+
+            Navigation.NavigateTo($"{currentPage}#language-editor");
         }
 
         return Task.CompletedTask;
