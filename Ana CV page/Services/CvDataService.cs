@@ -17,7 +17,7 @@ public class CvDataService
                     "Accounting | ERP Systems | Finance Systems | Process Improvement",
 
                 SummaryEnglish = """
-                    Accountant with a passion for ERP, Finance Systems,
+                    Accountant with passion for ERP, Finance Systems,
                     digital transformation, and process improvement.
                     I enjoy bridging the gap between finance and technology
                     by improving processes, supporting finance system
