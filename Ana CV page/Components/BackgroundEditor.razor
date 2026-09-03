@@ -288,6 +288,129 @@
 
         </div>
 
+        <div class="background-admin__group">
+
+            <div class="background-admin__group-header">
+                <div>
+                    <span class="admin-section-number">CERTIFICATIONS</span>
+                    <h3>Certifications</h3>
+                </div>
+
+                <button type="button"
+                        class="admin-add-button"
+                        @onclick="AddCertification">
+                    + Add certification
+                </button>
+            </div>
+
+            @if (editingCertification is not null)
+            {
+                <div id="certification-editor" class="background-editor">
+
+                    <div class="background-editor__header">
+                        <div>
+                            <span class="admin-section-number">
+                                @(isAddingCertification ? "NEW CERTIFICATION" : "EDIT CERTIFICATION")
+                            </span>
+
+                            <h3>
+                                @(isAddingCertification
+                                    ? "Add certification"
+                                    : editingCertification.Title)
+                            </h3>
+                        </div>
+
+                        <button type="button"
+                                class="admin-text-button"
+                                @onclick="CancelCertificationEdit">
+                            Close
+                        </button>
+                    </div>
+
+                    <div class="admin-form-grid">
+
+                        <div class="admin-field">
+                            <label>Title</label>
+                            <input type="text"
+                                   @bind="editingCertification.Title" />
+                        </div>
+
+                        <div class="admin-field">
+                            <label>Issuer</label>
+                            <input type="text"
+                                   @bind="editingCertification.Issuer" />
+                        </div>
+
+                        <div class="admin-field admin-field--full">
+                            <label>Description</label>
+                            <textarea rows="4"
+                                      @bind="editingCertification.Description"></textarea>
+                        </div>
+
+                    </div>
+
+                    <div class="background-editor__actions">
+
+                        <button type="button"
+                                class="admin-secondary-button"
+                                @onclick="CancelCertificationEdit">
+                            Cancel
+                        </button>
+
+                        <button type="button"
+                                class="admin-save-button"
+                                @onclick="ApplyCertification">
+                            Apply changes
+                        </button>
+
+                    </div>
+
+                </div>
+            }
+
+            @if (Certifications.Count == 0)
+            {
+                <div class="background-admin__empty">
+                    No certifications added yet.
+                </div>
+            }
+            else
+            {
+                <div class="background-admin__list">
+
+                    @foreach (var certification in Certifications.OrderBy(x => x.SortOrder))
+                    {
+                        <div class="background-admin__item">
+
+                            <div class="background-admin__item-content">
+                                <strong>@certification.Title</strong>
+                                <span>@certification.Issuer</span>
+                            </div>
+
+                            <div class="background-admin__actions">
+
+                                <button type="button"
+                                        class="admin-text-button"
+                                        @onclick="() => EditCertification(certification)">
+                                    Edit
+                                </button>
+
+                                <button type="button"
+                                        class="admin-text-button admin-text-button--danger"
+                                        @onclick="() => DeleteCertification(certification)">
+                                    Delete
+                                </button>
+
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+            }
+
+        </div>
+
     </div>
 
 </section>
@@ -299,6 +422,9 @@
     [Parameter, EditorRequired]
     public List<Language> Languages { get; set; } = [];
 
+    [Parameter, EditorRequired]
+    public List<Certification> Certifications { get; set; } = [];
+
     private Education? editingEducation;
     private Education? originalEducation;
     private bool isAddingEducation;
@@ -308,6 +434,11 @@
     private Language? originalLanguage;
     private bool isAddingLanguage;
     private bool scrollToLanguageEditor;
+
+    private Certification? editingCertification;
+    private Certification? originalCertification;
+    private bool isAddingCertification;
+    private bool scrollToCertificationEditor;
 
     private void AddEducation()
     {
@@ -434,6 +565,7 @@
         };
 
         isAddingLanguage = true;
+        scrollToLanguageEditor = true;
     }
 
     private void EditLanguage(Language language)
@@ -448,6 +580,7 @@
         };
 
         isAddingLanguage = false;
+        scrollToLanguageEditor = true;
     }
 
     private void CancelLanguageEdit()
@@ -531,6 +664,92 @@
         }
     }
 
+    private void AddCertification()
+    {
+        originalCertification = null;
+
+        editingCertification = new Certification
+        {
+            SortOrder = Certifications.Count + 1
+        };
+
+        isAddingCertification = true;
+        scrollToCertificationEditor = true;
+    }
+
+    private void EditCertification(Certification certification)
+    {
+        originalCertification = certification;
+
+        editingCertification = new Certification
+        {
+            Id = certification.Id,
+            Title = certification.Title,
+            Issuer = certification.Issuer,
+            Description = certification.Description,
+            FileUrl = certification.FileUrl,
+            SortOrder = certification.SortOrder
+        };
+
+        isAddingCertification = false;
+        scrollToCertificationEditor = true;
+    }
+
+    private void CancelCertificationEdit()
+    {
+        editingCertification = null;
+        originalCertification = null;
+        isAddingCertification = false;
+    }
+
+    private void ApplyCertification()
+    {
+        if (editingCertification is null)
+            return;
+
+        if (isAddingCertification)
+        {
+            Certifications.Add(editingCertification);
+        }
+        else if (originalCertification is not null)
+        {
+            originalCertification.Title = editingCertification.Title;
+            originalCertification.Issuer = editingCertification.Issuer;
+            originalCertification.Description = editingCertification.Description;
+            originalCertification.FileUrl = editingCertification.FileUrl;
+            originalCertification.SortOrder = editingCertification.SortOrder;
+        }
+
+        editingCertification = null;
+        originalCertification = null;
+        isAddingCertification = false;
+    }
+
+    private void DeleteCertification(Certification certification)
+    {
+        Certifications.Remove(certification);
+        ReorderCertifications();
+
+        if (ReferenceEquals(originalCertification, certification))
+        {
+            editingCertification = null;
+            originalCertification = null;
+            isAddingCertification = false;
+        }
+    }
+
+    private void ReorderCertifications()
+    {
+        var ordered = Certifications
+            .OrderBy(x => x.SortOrder)
+            .ToList();
+
+        for (var i = 0; i < ordered.Count; i++)
+        {
+            ordered[i].SortOrder = i + 1;
+        }
+    }
+
     protected override Task OnAfterRenderAsync(bool firstRender)
     {
         if (scrollToEducationEditor)
@@ -549,6 +768,15 @@
             var currentPage = Navigation.Uri.Split('#')[0];
 
             Navigation.NavigateTo($"{currentPage}#language-editor");
+        }
+
+        if (scrollToCertificationEditor)
+        {
+            scrollToCertificationEditor = false;
+
+            var currentPage = Navigation.Uri.Split('#')[0];
+
+            Navigation.NavigateTo($"{currentPage}#certification-editor");
         }
 
         return Task.CompletedTask;
