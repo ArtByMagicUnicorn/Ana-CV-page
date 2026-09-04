@@ -19,6 +19,7 @@ public class Profile
 
     public string? LinkedInUrl { get; set; }
     public string? ProfileImageUrl { get; set; }
+    public string? IntroVideoUrl { get; set; }
 
     public bool OpenToWork { get; set; }
 

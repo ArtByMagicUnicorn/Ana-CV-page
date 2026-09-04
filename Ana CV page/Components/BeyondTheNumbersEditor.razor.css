@@ -1,0 +1,36 @@
+/* CSS for BeyondTheNumbersEditor component */
+.beyond-preview {
+    margin-top: 1.5rem;
+}
+
+.beyond-preview__label {
+    display: inline-block;
+    margin-bottom: 0.6rem;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.beyond-preview__card {
+    padding: 1.5rem;
+    background: var(--accent-light);
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+}
+
+    .beyond-preview__card h3 {
+        margin: 0 0 0.75rem;
+    }
+
+    .beyond-preview__card p {
+        margin: 0;
+        white-space: pre-line;
+    }
+
+    .beyond-preview__card small {
+        display: block;
+        margin-top: 1rem;
+        color: var(--text-muted);
+    }

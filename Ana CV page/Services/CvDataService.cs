@@ -45,6 +45,7 @@ public class CvDataService
                     "På plats, hybrid eller distans",
 
                 ProfileImageUrl = "images/Ana-Maria.png",
+                IntroVideoUrl = null,
             },
 
             BeyondTheNumbers = new BeyondTheNumbersData

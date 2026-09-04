@@ -20,6 +20,20 @@
             <span>Show Beyond the Numbers on the public site</span>
         </label>
     </div>
+
+    <div class="beyond-preview">
+        <span class="beyond-preview__label">Preview</span>
+
+        <div class="beyond-preview__card">
+            <h3>Beyond the Numbers</h3>
+            <p>@BeyondTheNumbers.Text</p>
+
+            @if (!BeyondTheNumbers.IsVisible)
+            {
+                <small>This section is currently hidden on the public site.</small>
+            }
+        </div>
+    </div>
 </section>
 
 @code {

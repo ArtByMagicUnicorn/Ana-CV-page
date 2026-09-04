@@ -1,0 +1,110 @@
+﻿@using Ana_CV_page.Models
+
+<section id="media" class="admin-section">
+    <div class="admin-section__heading">
+        <span class="admin-section__number">06</span>
+        <div>
+            <h2>Media</h2>
+            <p>Manage profile image, Beyond the Numbers image and intro video.</p>
+        </div>
+    </div>
+
+    <div class="admin-form">
+        <div class="admin-field admin-field--full">
+            <label>Profile image</label>
+            <input type="text" @bind="Profile.ProfileImageUrl" />
+        </div>
+
+        @if (!string.IsNullOrWhiteSpace(Profile.ProfileImageUrl))
+        {
+            <div class="media-preview">
+                <span class="media-preview__label">Profile image preview</span>
+                <img src="@Profile.ProfileImageUrl"
+                     alt="Profile image preview"
+                     class="media-preview__profile" />
+            </div>
+        }
+
+        <div class="admin-field admin-field--full">
+            <label>Beyond the Numbers image</label>
+            <input type="text" @bind="BeyondTheNumbers.ImageUrl" />
+        </div>
+
+        @if (!string.IsNullOrWhiteSpace(BeyondTheNumbers.ImageUrl))
+        {
+            <div class="media-preview">
+                <span class="media-preview__label">Beyond the Numbers preview</span>
+                <img src="@BeyondTheNumbers.ImageUrl"
+                     alt="Beyond the Numbers image preview"
+                     class="media-preview__beyond" />
+            </div>
+        }
+
+        <div class="admin-field admin-field--full">
+            <label>Intro video URL</label>
+            <input type="text" @bind="Profile.IntroVideoUrl" />
+        </div>
+
+        @{
+            var videoId = GetYouTubeVideoId(Profile.IntroVideoUrl);
+        }
+
+        @if (!string.IsNullOrWhiteSpace(videoId))
+        {
+            <div class="media-preview">
+                <span class="media-preview__label">Intro video preview</span>
+
+                <div class="media-preview__video">
+                    <iframe src="@($"https://www.youtube-nocookie.com/embed/{videoId}")"
+                            title="Ana Gheorghe intro video preview"
+                            loading="lazy"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+
+@code {
+    [Parameter, EditorRequired]
+    public Profile Profile { get; set; } = new();
+
+    [Parameter, EditorRequired]
+    public BeyondTheNumbersData BeyondTheNumbers { get; set; } = new();
+
+
+    private string? GetYouTubeVideoId(string? url)
+    {
+        if (string.IsNullOrWhiteSpace(url))
+            return null;
+
+        if (!Uri.TryCreate(url, UriKind.Absolute, out var uri))
+            return null;
+
+        if (uri.Host.Contains("youtu.be"))
+            return uri.AbsolutePath.Trim('/');
+
+        if (uri.Host.Contains("youtube.com") &&
+(uri.AbsolutePath.StartsWith("/shorts/") ||
+ uri.AbsolutePath.StartsWith("/embed/")))
+        {
+            return uri.AbsolutePath.Split('/', StringSplitOptions.RemoveEmptyEntries)
+                                   .LastOrDefault();
+        }
+
+        if (uri.Host.Contains("youtube.com"))
+        {
+            foreach (var part in uri.Query.TrimStart('?').Split('&'))
+            {
+                var pair = part.Split('=', 2);
+
+                if (pair.Length == 2 && pair[0] == "v")
+                    return Uri.UnescapeDataString(pair[1]);
+            }
+        }
+
+        return null;
+    }
+}
