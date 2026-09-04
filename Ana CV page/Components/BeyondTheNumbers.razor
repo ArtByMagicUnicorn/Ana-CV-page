@@ -1,63 +1,59 @@
-﻿<section id="beyond" class="beyond">
+﻿@using Ana_CV_page.Models
 
-    <div class="beyond__header">
-        <p class="eyebrow">Beyond the numbers</p>
+@if (Data.IsVisible)
+{
+    <section id="beyond" class="beyond">
 
-        <h2>
-            There's more to me than
-            <span>spreadsheets and systems.</span>
-        </h2>
-    </div>
+        <div class="beyond__header">
+            <p class="eyebrow">Beyond the numbers</p>
 
-    <div class="beyond__grid">
+            <h2>
+                There's more to me than
+                <span>spreadsheets and systems.</span>
+            </h2>
+        </div>
 
-        <div class="beyond__text">
+        <div class="beyond__grid">
 
-            <p class="beyond__lead">
-                I’m more than my professional title.
-                Outside of work, I value meaningful connections,
-                curiosity and experiences that help me grow.
-            </p>
+            <div class="beyond__text">
 
-            <p>
-                This is where I share a little more about who I am
-                beyond finance, ERP systems and process improvement.
-                The people around me, the things I enjoy and the way
-                I choose to spend my time all shape the person I bring
-                with me into my professional life.
-            </p>
+                @Data.Text
 
-            <div class="beyond__values">
-                <span>Curiosity</span>
-                <span>People</span>
-                <span>Learning</span>
-                <span>Growth</span>
+                <div class="beyond__values">
+                    <span>Curiosity</span>
+                    <span>People</span>
+                    <span>Learning</span>
+                    <span>Growth</span>
+                </div>
+
+            </div>
+
+            <div class="beyond__visual">
+
+                @if (!string.IsNullOrWhiteSpace(ImageUrl))
+                {
+                    <img src="@ImageUrl"
+                    alt="Ana outside of work"
+                    class="beyond__image" />
+                }
+                else
+                {
+                    <div class="beyond__image-placeholder">
+                        <span>Personal photo</span>
+                    </div>
+                }
+
             </div>
 
         </div>
 
-        <div class="beyond__visual">
-
-            @if (!string.IsNullOrWhiteSpace(ImageUrl))
-            {
-                <img src="@ImageUrl"
-                     alt="Ana outside of work"
-                     class="beyond__image" />
-            }
-            else
-            {
-                <div class="beyond__image-placeholder">
-                    <span>Personal photo</span>
-                </div>
-            }
-
-        </div>
-
-    </div>
-
-</section>
+    </section>
+}
 
 @code {
     [Parameter]
     public string? ImageUrl { get; set; }
+
+    [Parameter, EditorRequired]
+    public BeyondTheNumbersData Data { get; set; } = new();
 }

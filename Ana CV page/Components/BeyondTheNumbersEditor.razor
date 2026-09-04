@@ -1,0 +1,28 @@
+﻿@using Ana_CV_page.Models
+
+<section id="beyond" class="admin-section">
+    <div class="admin-section__heading">
+        <span class="admin-section__number">05</span>
+        <div>
+            <h2>Beyond the Numbers</h2>
+            <p>Manage the personal side of Ana's profile.</p>
+        </div>
+    </div>
+
+    <div class="admin-form">
+        <div class="admin-field admin-field--full">
+            <label>Text</label>
+            <textarea rows="8" @bind="BeyondTheNumbers.Text"></textarea>
+        </div>
+
+        <label class="admin-checkbox">
+            <input type="checkbox" @bind="BeyondTheNumbers.IsVisible" />
+            <span>Show Beyond the Numbers on the public site</span>
+        </label>
+    </div>
+</section>
+
+@code {
+    [Parameter, EditorRequired]
+    public BeyondTheNumbersData BeyondTheNumbers { get; set; } = new();
+}

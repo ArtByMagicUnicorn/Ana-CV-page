@@ -4,9 +4,10 @@ namespace Ana_CV_page.Services;
 
 public class CvDataService
 {
+    private CvData? _cv;
     public CvData GetCv()
     {
-        return new CvData
+        return _cv ??= new CvData
         {
             Profile = new Profile
             {
@@ -44,6 +45,12 @@ public class CvDataService
                     "På plats, hybrid eller distans",
 
                 ProfileImageUrl = "images/Ana-Maria.png",
+            },
+
+            BeyondTheNumbers = new BeyondTheNumbersData
+            {
+                Text = "Outside of finance and systems, I value curiosity, creativity and continuous learning.",
+                IsVisible = true
             },
 
             Experiences =

@@ -9,5 +9,6 @@
         public List<Skill> Skills { get; set; } = [];
         public List<Language> Languages { get; set; } = [];
         public List<Certification> Certifications { get; set; } = [];
+        public BeyondTheNumbersData BeyondTheNumbers { get; set; } = new();
     }
 }
