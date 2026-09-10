@@ -90,7 +90,9 @@
 
         <div class="skills-admin__list">
 
-            @foreach (var skill in Skills.OrderBy(x => x.SortOrder))
+            @foreach (var skill in Skills
+    .OrderBy(x => x.Category)
+    .ThenBy(x => x.SortOrder))
             {
                 <div class="skills-admin__item">
 
@@ -105,7 +107,9 @@
                             <button type="button"
                                     class="highlight-button"
                                     title="Move up"
-                                    disabled="@(skill.SortOrder == Skills.Min(x => x.SortOrder))"
+                                    disabled="@(skill.SortOrder == Skills
+                                    .Where(x => x.Category == skill.Category)
+                                    .Min(x => x.SortOrder))"
                                     @onclick="() => MoveSkillUp(skill)">
                                 ↑
                             </button>
@@ -113,7 +117,9 @@
                             <button type="button"
                                     class="highlight-button"
                                     title="Move down"
-                                    disabled="@(skill.SortOrder == Skills.Max(x => x.SortOrder))"
+                                    disabled="@(skill.SortOrder == Skills
+                                    .Where(x => x.Category == skill.Category)
+                                    .Max(x => x.SortOrder))"
                                     @onclick="() => MoveSkillDown(skill)">
                                 ↓
                             </button>
@@ -176,8 +182,15 @@
 
         if (isAddingSkill)
         {
+            editingSkill.SortOrder = Skills
+                .Where(x => x.Category == editingSkill.Category)
+                .Select(x => x.SortOrder)
+                .DefaultIfEmpty(0)
+                .Max() + 1;
+
             Skills.Add(editingSkill);
         }
+
         else if (originalSkill is not null)
         {
             originalSkill.Name = editingSkill.Name;
@@ -222,8 +235,9 @@
     private void MoveSkillUp(Skill skill)
     {
         var ordered = Skills
-            .OrderBy(x => x.SortOrder)
-            .ToList();
+    .Where(x => x.Category == skill.Category)
+    .OrderBy(x => x.SortOrder)
+    .ToList();
 
         var index = ordered.IndexOf(skill);
 
@@ -239,8 +253,9 @@
     private void MoveSkillDown(Skill skill)
     {
         var ordered = Skills
-            .OrderBy(x => x.SortOrder)
-            .ToList();
+    .Where(x => x.Category == skill.Category)
+    .OrderBy(x => x.SortOrder)
+    .ToList();
 
         var index = ordered.IndexOf(skill);
 
@@ -255,13 +270,16 @@
 
     private void ReorderSkills()
     {
-        var ordered = Skills
-            .OrderBy(x => x.SortOrder)
-            .ToList();
-
-        for (var i = 0; i < ordered.Count; i++)
+        foreach (var group in Skills.GroupBy(x => x.Category))
         {
-            ordered[i].SortOrder = i + 1;
+            var ordered = group
+                .OrderBy(x => x.SortOrder)
+                .ToList();
+
+            for (var i = 0; i < ordered.Count; i++)
+            {
+                ordered[i].SortOrder = i + 1;
+            }
         }
     }
 

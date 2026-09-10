@@ -383,6 +383,14 @@ main {
     font-weight: 650;
 }
 
+.admin-field__hint {
+    display: block;
+    margin-top: 0.35rem;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    line-height: 1.4;
+}
+
 .experience-admin {
     display: flex;
     flex-direction: column;

@@ -34,3 +34,26 @@
         margin-top: 1rem;
         color: var(--text-muted);
     }
+
+.beyond-format-toolbar {
+    display: flex;
+    gap: 0.4rem;
+    margin-bottom: 0.5rem;
+}
+
+.beyond-format-button {
+    width: 2.25rem;
+    height: 2.25rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+    .beyond-format-button:hover {
+        background: var(--accent-light);
+    }

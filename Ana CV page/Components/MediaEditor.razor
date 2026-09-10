@@ -13,6 +13,9 @@
         <div class="admin-field admin-field--full">
             <label>Profile image</label>
             <input type="text" @bind="Profile.ProfileImageUrl" />
+            <small class="admin-field__hint">
+                Image upload will be available when storage is connected.
+            </small>
         </div>
 
         @if (!string.IsNullOrWhiteSpace(Profile.ProfileImageUrl))
@@ -28,6 +31,9 @@
         <div class="admin-field admin-field--full">
             <label>Beyond the Numbers image</label>
             <input type="text" @bind="BeyondTheNumbers.ImageUrl" />
+            <small class="admin-field__hint">
+                Image upload will be available when storage is connected.
+            </small>
         </div>
 
         @if (!string.IsNullOrWhiteSpace(BeyondTheNumbers.ImageUrl))
@@ -43,6 +49,9 @@
         <div class="admin-field admin-field--full">
             <label>Intro video URL</label>
             <input type="text" @bind="Profile.IntroVideoUrl" />
+            <small class="admin-field__hint">
+                Paste a YouTube link to show the video on the public site.
+            </small>
         </div>
 
         @{

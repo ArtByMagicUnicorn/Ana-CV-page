@@ -1,4 +1,6 @@
 ﻿@using Ana_CV_page.Models
+@using System.Text.Encodings.Web
+@using System.Text.RegularExpressions
 
 @if (Data.IsVisible)
 {
@@ -17,7 +19,7 @@
 
             <div class="beyond__text">
 
-                @Data.Text
+                @FormatText(Data.Text)
 
                 <div class="beyond__values">
                     <span>Curiosity</span>
@@ -56,4 +58,21 @@
 
     [Parameter, EditorRequired]
     public BeyondTheNumbersData Data { get; set; } = new();
+
+    private MarkupString FormatText(string? text)
+    {
+        var encoded = HtmlEncoder.Default.Encode(text ?? string.Empty);
+
+        encoded = Regex.Replace(
+            encoded,
+            @"\*\*(.+?)\*\*",
+            "<strong>$1</strong>");
+
+        encoded = Regex.Replace(
+            encoded,
+            @"(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)",
+            "<em>$1</em>");
+
+        return new MarkupString(encoded);
+    }
 }

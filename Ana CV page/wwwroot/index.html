@@ -29,6 +29,78 @@
         <span class="dismiss">🗙</span>
     </div>
     <script src="_framework/blazor.webassembly#[.{fingerprint}].js"></script>
+    <script>
+        window.formatBeyondText = (elementId, marker) => {
+            const textarea = document.getElementById(elementId);
+
+            if (!textarea) {
+                return;
+            }
+
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const selectedText = textarea.value.substring(start, end);
+
+            if (!selectedText) {
+                return;
+            }
+
+            const before = textarea.value.substring(
+                Math.max(0, start - marker.length),
+                start
+            );
+
+            const after = textarea.value.substring(
+                end,
+                end + marker.length
+            );
+
+            // Markören ligger utanför den markerade texten → ta bort den.
+            if (before === marker && after === marker) {
+                textarea.setRangeText(
+                    selectedText,
+                    start - marker.length,
+                    end + marker.length,
+                    "select"
+                );
+            }
+
+            // Markören ingår redan i själva markeringen → ta bort den.
+            else if (
+                selectedText.startsWith(marker) &&
+                selectedText.endsWith(marker) &&
+                selectedText.length > marker.length * 2
+            ) {
+                const plainText = selectedText.substring(
+                    marker.length,
+                    selectedText.length - marker.length
+                );
+
+                textarea.setRangeText(
+                    plainText,
+                    start,
+                    end,
+                    "select"
+                );
+            }
+
+            // Ingen formattering ännu → lägg till.
+            else {
+                textarea.setRangeText(
+                    marker + selectedText + marker,
+                    start,
+                    end,
+                    "select"
+                );
+            }
+
+            textarea.dispatchEvent(
+                new Event("change", { bubbles: true })
+            );
+
+            textarea.focus();
+        };
+    </script>
 </body>
 
 </html>
