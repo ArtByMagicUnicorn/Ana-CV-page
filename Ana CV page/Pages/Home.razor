@@ -40,8 +40,8 @@
 @code {
     private CvData cv = new();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        cv = CvService.GetCv();
+        cv = await CvService.GetCvAsync() ?? new CvData();
     }
 }

@@ -44,6 +44,19 @@
                     Update the content of your CV without touching the code.
                 </p>
             </div>
+
+            <div class="admin-header-actions">
+                <span class="admin-form-note">
+                    @saveMessage
+                </span>
+
+                <button type="button"
+                        class="admin-save-button"
+                        @onclick="SaveCvAsync"
+                        disabled="@isSaving">
+                    @(isSaving ? "Saving..." : "Save changes")
+                </button>
+            </div>
         </header>
 
         <ProfileEditor Profile="@cv.Profile" />
@@ -68,9 +81,33 @@
 @code {
     private CvData cv = new();
 
-    protected override void OnInitialized()
+    private bool isSaving;
+    private string? saveMessage;
+
+    protected override async Task OnInitializedAsync()
     {
-        cv = CvService.GetCv();
+        cv = await CvService.GetCvAsync() ?? new CvData();
+    }
+
+    private async Task SaveCvAsync()
+    {
+        try
+        {
+            isSaving = true;
+            saveMessage = "Saving...";
+
+            await CvService.SaveCvAsync(cv);
+
+            saveMessage = "Saved ✓";
+        }
+        catch
+        {
+            saveMessage = "Could not save.";
+        }
+        finally
+        {
+            isSaving = false;
+        }
     }
 
   

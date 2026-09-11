@@ -1,9 +1,16 @@
 ﻿using Ana_CV_page.Models;
+using System.Net.Http.Json;
 
 namespace Ana_CV_page.Services;
 
 public class CvDataService
 {
+    private readonly HttpClient _http;
+
+    public CvDataService(HttpClient http)
+    {
+        _http = http;
+    }
     private CvData? _cv;
     public CvData GetCv()
     {
@@ -324,6 +331,16 @@ public class CvDataService
                 }
             ]
         };
+    }
+    public async Task<CvData?> GetCvAsync()
+    {
+        return await _http.GetFromJsonAsync<CvData>("api/cv");
+    }
+
+    public async Task SaveCvAsync(CvData cv)
+    {
+        var response = await _http.PutAsJsonAsync("api/cv", cv);
+        response.EnsureSuccessStatusCode();
     }
 }
 

@@ -12,9 +12,16 @@ namespace Ana_CV_page
             builder.RootComponents.Add<App>("#app");
             builder.RootComponents.Add<HeadOutlet>("head::after");
 
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            var apiBaseAddress = builder.HostEnvironment.IsDevelopment()
+    ? "http://localhost:7279/"
+    : builder.HostEnvironment.BaseAddress;
 
-            builder.Services.AddSingleton<CvDataService>();
+            builder.Services.AddScoped(sp => new HttpClient
+            {
+                BaseAddress = new Uri(apiBaseAddress)
+            });
+
+            builder.Services.AddScoped<CvDataService>();
 
             await builder.Build().RunAsync();
         }
