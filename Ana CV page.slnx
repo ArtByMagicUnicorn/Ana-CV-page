@@ -1,3 +1,5 @@
 <Solution>
   <Project Path="Ana CV page/Ana CV page.csproj" />
+  <Project Path="Ana_CV_page.Shared/Ana_CV_page.Shared.csproj" Id="1d8198f7-8b76-4bf8-a1cb-514909e342ba" />
+  <Project Path="api/api.csproj" Id="3fb0c90f-4728-420c-9607-9f796019f5ec" />
 </Solution>

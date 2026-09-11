@@ -1,5 +1,8 @@
 ﻿@using Ana_CV_page.Models
+@using System.Text.Encodings.Web
+@using System.Text.RegularExpressions
 @inject IJSRuntime JS
+
 
 <section id="beyond" class="admin-section">
     <div class="admin-section__heading">
@@ -44,7 +47,7 @@
 
         <div class="beyond-preview__card">
             <h3>Beyond the Numbers</h3>
-            <p>@BeyondTheNumbers.Text</p>
+            <p>@FormatPreviewText(BeyondTheNumbers.Text)</p>
 
             @if (!BeyondTheNumbers.IsVisible)
             {
@@ -64,5 +67,22 @@
             "formatBeyondText",
             "beyond-text-editor",
             marker);
+    }
+
+    private MarkupString FormatPreviewText(string? text)
+    {
+        var encoded = HtmlEncoder.Default.Encode(text ?? string.Empty);
+
+        encoded = Regex.Replace(
+            encoded,
+            @"\*\*(.+?)\*\*",
+            "<strong>$1</strong>");
+
+        encoded = Regex.Replace(
+            encoded,
+            @"(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)",
+            "<em>$1</em>");
+
+        return new MarkupString(encoded);
     }
 }
