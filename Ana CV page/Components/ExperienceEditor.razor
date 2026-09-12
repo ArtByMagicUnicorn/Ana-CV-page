@@ -286,7 +286,7 @@
         editingExperience = new Ana_CV_page.Models.Experience
         {
             StartDate = DateOnly.FromDateTime(DateTime.Today),
-            SortOrder = Experiences.Count + 1
+            SortOrder = 1
         };
 
         isAddingExperience = true;
@@ -306,7 +306,13 @@
 
         if (isAddingExperience)
         {
-            Experiences.Add(editingExperience);
+            foreach (var experience in Experiences)
+            {
+                experience.SortOrder++;
+            }
+
+            editingExperience.SortOrder = 1;
+            Experiences.Insert(0, editingExperience);
         }
         else if (originalExperience is not null)
         {
