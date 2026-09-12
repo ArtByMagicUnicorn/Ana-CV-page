@@ -51,7 +51,7 @@ public class CvDataService
                 PreferredWorkMode =
                     "På plats, hybrid eller distans",
 
-                ProfileImageUrl = "images/Ana-Maria.png",
+                ProfileImageUrl = "images/ana-maria.png",
                 IntroVideoUrl = null,
             },
 
