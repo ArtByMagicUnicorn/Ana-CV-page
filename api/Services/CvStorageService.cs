@@ -1,7 +1,8 @@
 ﻿using Ana_CV_page.Models;
 using Azure.Storage.Blobs;
-using System.Text.Json;
+using Microsoft.Extensions.Configuration;
 using System.Text;
+using System.Text.Json;
 
 namespace api.Services;
 
@@ -12,9 +13,13 @@ public class CvStorageService
 
     private readonly BlobContainerClient _container;
 
-    public CvStorageService()
+    public CvStorageService(IConfiguration configuration)
     {
-        var blobService = new BlobServiceClient("UseDevelopmentStorage=true");
+        var connectionString =
+            configuration["CvStorageConnectionString"]
+            ?? "UseDevelopmentStorage=true";
+
+        var blobService = new BlobServiceClient(connectionString);
 
         _container = blobService.GetBlobContainerClient(ContainerName);
     }

@@ -1,0 +1,21 @@
+﻿{
+    "routes": [
+        {
+            "route": "/api/cv",
+            "methods": [ "GET" ],
+            "allowedRoles": [ "anonymous" ]
+        },
+        {
+            "route": "/api/cv",
+            "methods": [ "PUT" ],
+            "allowedRoles": [ "cv_admin" ]
+        },
+        {
+            "route": "/admin*",
+            "allowedRoles": [ "cv_admin" ]
+        }
+    ],
+    "navigationFallback": {
+        "rewrite": "/index.html"
+    }
+}
