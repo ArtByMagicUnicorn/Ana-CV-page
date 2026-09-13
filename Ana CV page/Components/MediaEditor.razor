@@ -18,22 +18,24 @@
 
             <input type="text" @bind="Profile.ProfileImageUrl" />
 
-            <InputFile OnChange="OnProfileImageSelected"
-                       accept=".png,.jpg,.jpeg,.webp" />
+            <div class="admin-upload">
+                <InputFile OnChange="OnProfileImageSelected"
+                           accept=".png,.jpg,.jpeg,.webp" />
 
-            <button type="button"
-                    class="admin-button"
-                    @onclick="UploadProfileImageAsync"
-                    disabled="@(selectedProfileImage is null || isUploadingProfileImage)">
-                @(isUploadingProfileImage ? "Uploading..." : "Upload image")
-            </button>
+                <button type="button"
+                        class="admin-button"
+                        @onclick="UploadProfileImageAsync"
+                        disabled="@(selectedProfileImage is null || isUploadingProfileImage)">
+                    @(isUploadingProfileImage ? "Uploading..." : "Upload image")
+                </button>
 
-            @if (!string.IsNullOrWhiteSpace(profileUploadMessage))
-            {
-                <small class="admin-field__hint">
-                    @profileUploadMessage
-                </small>
-            }
+                @if (!string.IsNullOrWhiteSpace(profileUploadMessage))
+                {
+                    <small class="admin-field__hint">
+                        @profileUploadMessage
+                    </small>
+                }
+            </div>
         </div>
 
         @if (!string.IsNullOrWhiteSpace(Profile.ProfileImageUrl))
@@ -49,27 +51,26 @@
         <div class="admin-field admin-field--full">
             <label>Beyond the Numbers image</label>
             <input type="text" @bind="BeyondTheNumbers.ImageUrl" />
-            <small class="admin-field__hint">
-                Image upload will be available when storage is connected.
-            </small>
         </div>
 
-        <InputFile OnChange="OnBeyondImageSelected"
-                   accept=".png,.jpg,.jpeg,.webp" />
+        <div class="admin-upload">
+            <InputFile OnChange="OnBeyondImageSelected"
+                       accept=".png,.jpg,.jpeg,.webp" />
 
-        <button type="button"
-                class="admin-button"
-                @onclick="UploadBeyondImageAsync"
-                disabled="@(selectedBeyondImage is null || isUploadingBeyondImage)">
-            @(isUploadingBeyondImage ? "Uploading..." : "Upload image")
-        </button>
+            <button type="button"
+                    class="admin-button"
+                    @onclick="UploadBeyondImageAsync"
+                    disabled="@(selectedBeyondImage is null || isUploadingBeyondImage)">
+                @(isUploadingBeyondImage ? "Uploading..." : "Upload image")
+            </button>
 
-        @if (!string.IsNullOrWhiteSpace(beyondUploadMessage))
-        {
-            <small class="admin-field__hint">
-                @beyondUploadMessage
-            </small>
-        }
+            @if (!string.IsNullOrWhiteSpace(beyondUploadMessage))
+            {
+                <small class="admin-field__hint">
+                    @beyondUploadMessage
+                </small>
+            }
+        </div>
 
         @if (!string.IsNullOrWhiteSpace(BeyondTheNumbers.ImageUrl))
         {

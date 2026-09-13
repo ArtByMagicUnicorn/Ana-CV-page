@@ -391,6 +391,62 @@ main {
     line-height: 1.4;
 }
 
+/* MEDIA UPLOAD */
+
+.admin-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .65rem;
+}
+
+.admin-upload input[type="file"] {
+    padding: .45rem;
+    background: white;
+    color: var(--text-muted);
+    font-size: .85rem;
+    cursor: pointer;
+}
+
+    .admin-upload input[type="file"]::file-selector-button {
+        margin-right: .8rem;
+        padding: .65rem .9rem;
+        border: 1px solid var(--border);
+        border-radius: .5rem;
+        background: var(--accent-light);
+        color: var(--accent);
+        font: inherit;
+        font-weight: 650;
+        cursor: pointer;
+    }
+
+        .admin-upload input[type="file"]::file-selector-button:hover {
+            border-color: var(--accent);
+        }
+
+.admin-button {
+    align-self: flex-start;
+    padding: .7rem 1rem;
+    border: 0;
+    border-radius: .65rem;
+    background: var(--accent);
+    color: white;
+    font: inherit;
+    font-size: .85rem;
+    font-weight: 650;
+    cursor: pointer;
+    transition: opacity .2s ease, transform .2s ease;
+}
+
+    .admin-button:hover:not(:disabled) {
+        transform: translateY(-1px);
+    }
+
+    .admin-button:disabled {
+        opacity: .45;
+        cursor: not-allowed;
+    }
+
 .experience-admin {
     display: flex;
     flex-direction: column;
