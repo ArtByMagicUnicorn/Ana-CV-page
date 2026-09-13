@@ -10,6 +10,7 @@ builder.ConfigureFunctionsWebApplication();
 
 
 builder.Services.AddSingleton<CvStorageService>();
+builder.Services.AddSingleton<MediaStorageService>();
 
 // Application Insights isn't enabled by default. See https://aka.ms/AAt8mw4.
 // builder.Services

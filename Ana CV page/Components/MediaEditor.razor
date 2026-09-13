@@ -1,4 +1,7 @@
 ﻿@using Ana_CV_page.Models
+@using Microsoft.AspNetCore.Components.Forms
+@using System.Net.Http.Json
+@inject HttpClient Http
 
 <section id="media" class="admin-section">
     <div class="admin-section__heading">
@@ -12,10 +15,25 @@
     <div class="admin-form">
         <div class="admin-field admin-field--full">
             <label>Profile image</label>
+
             <input type="text" @bind="Profile.ProfileImageUrl" />
-            <small class="admin-field__hint">
-                Image upload will be available when storage is connected.
-            </small>
+
+            <InputFile OnChange="OnProfileImageSelected"
+                       accept=".png,.jpg,.jpeg,.webp" />
+
+            <button type="button"
+                    class="admin-button"
+                    @onclick="UploadProfileImageAsync"
+                    disabled="@(selectedProfileImage is null || isUploadingProfileImage)">
+                @(isUploadingProfileImage ? "Uploading..." : "Upload image")
+            </button>
+
+            @if (!string.IsNullOrWhiteSpace(profileUploadMessage))
+            {
+                <small class="admin-field__hint">
+                    @profileUploadMessage
+                </small>
+            }
         </div>
 
         @if (!string.IsNullOrWhiteSpace(Profile.ProfileImageUrl))
@@ -82,7 +100,70 @@
 
     [Parameter, EditorRequired]
     public BeyondTheNumbersData BeyondTheNumbers { get; set; } = new();
+    private IBrowserFile? selectedProfileImage;
+    private bool isUploadingProfileImage;
+    private string? profileUploadMessage;
 
+    private void OnProfileImageSelected(InputFileChangeEventArgs e)
+    {
+        selectedProfileImage = e.File;
+        profileUploadMessage = null;
+    }
+
+    private async Task UploadProfileImageAsync()
+    {
+        if (selectedProfileImage is null)
+            return;
+
+        try
+        {
+            isUploadingProfileImage = true;
+            profileUploadMessage = "Uploading...";
+
+            await using var stream =
+                selectedProfileImage.OpenReadStream(5 * 1024 * 1024);
+
+            using var fileContent = new StreamContent(stream);
+
+            using var form = new MultipartFormDataContent();
+            form.Add(
+                fileContent,
+                "file",
+                selectedProfileImage.Name);
+
+            var response = await Http.PostAsync(
+                "api/media/profile-image",
+                form);
+
+            response.EnsureSuccessStatusCode();
+
+            var result =
+                await response.Content.ReadFromJsonAsync<MediaUploadResponse>();
+
+            if (string.IsNullOrWhiteSpace(result?.Url))
+            {
+                profileUploadMessage = "Upload failed.";
+                return;
+            }
+
+            Profile.ProfileImageUrl = result.Url;
+            profileUploadMessage = "Uploaded ✓";
+            selectedProfileImage = null;
+        }
+        catch
+        {
+            profileUploadMessage = "Upload failed.";
+        }
+        finally
+        {
+            isUploadingProfileImage = false;
+        }
+    }
+
+    private sealed class MediaUploadResponse
+    {
+        public string Url { get; set; } = string.Empty;
+    }
 
     private string? GetYouTubeVideoId(string? url)
     {

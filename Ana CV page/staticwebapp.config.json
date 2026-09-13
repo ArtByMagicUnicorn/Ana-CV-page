@@ -11,6 +11,11 @@
             "allowedRoles": [ "cv_admin" ]
         },
         {
+            "route": "/api/media/profile-image",
+            "methods": [ "POST" ],
+            "allowedRoles": [ "cv_admin" ]
+        },
+        {
             "route": "/admin*",
             "allowedRoles": [ "cv_admin" ]
         }
