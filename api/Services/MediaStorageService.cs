@@ -28,7 +28,7 @@ public class MediaStorageService
     {
         await _container.CreateIfNotExistsAsync();
 
-        var blobName = $"profile/ana-maria{extension}";
+        var blobName = $"profile/ana-maria-{DateTime.UtcNow.Ticks}{extension}";
         var blob = _container.GetBlobClient(blobName);
 
         await blob.UploadAsync(stream, overwrite: true);
