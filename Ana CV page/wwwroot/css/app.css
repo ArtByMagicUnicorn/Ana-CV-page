@@ -768,6 +768,16 @@ main {
     .admin-save-button {
         width: 100%;
     }
+
+    .admin-header-actions {
+        width: 100%;
+        gap: .75rem;
+    }
+
+    .admin-logout-link {
+        display: inline-block;
+        margin-top: .25rem;
+    }
 }
 
     @media (max-width: 600px) {
