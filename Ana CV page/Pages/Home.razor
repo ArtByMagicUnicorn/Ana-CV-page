@@ -37,6 +37,14 @@
 
 <ContactSection Profile="@cv.Profile" />
 
+<footer class="site-footer">
+    <span>© @DateTime.Now.Year Ana M Gheorghe</span>
+
+    <a href="/admin" class="site-footer__admin">
+        Admin
+    </a>
+</footer>
+
 @code {
     private CvData cv = new();
 
