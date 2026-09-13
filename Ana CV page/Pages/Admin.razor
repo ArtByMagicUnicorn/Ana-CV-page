@@ -56,6 +56,11 @@
                         disabled="@isSaving">
                     @(isSaving ? "Saving..." : "Save changes")
                 </button>
+
+                <a href="/.auth/logout?post_logout_redirect_uri=/"
+                   class="admin-logout-link">
+                    Log out
+                </a>
             </div>
         </header>
 
