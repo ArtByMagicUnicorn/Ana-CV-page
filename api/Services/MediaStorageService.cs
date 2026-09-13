@@ -41,4 +41,27 @@ public class MediaStorageService
 
         return blob.Uri.ToString();
     }
+
+    public async Task<string> UploadBeyondImageAsync(
+    Stream stream,
+    string contentType,
+    string extension)
+    {
+        await _container.CreateIfNotExistsAsync();
+
+        var blobName =
+            $"beyond/beyond-the-numbers-{DateTime.UtcNow.Ticks}{extension}";
+
+        var blob = _container.GetBlobClient(blobName);
+
+        await blob.UploadAsync(stream, overwrite: true);
+
+        await blob.SetHttpHeadersAsync(
+            new BlobHttpHeaders
+            {
+                ContentType = contentType
+            });
+
+        return blob.Uri.ToString();
+    }
 }

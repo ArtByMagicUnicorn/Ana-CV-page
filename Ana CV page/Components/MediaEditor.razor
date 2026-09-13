@@ -54,6 +54,23 @@
             </small>
         </div>
 
+        <InputFile OnChange="OnBeyondImageSelected"
+                   accept=".png,.jpg,.jpeg,.webp" />
+
+        <button type="button"
+                class="admin-button"
+                @onclick="UploadBeyondImageAsync"
+                disabled="@(selectedBeyondImage is null || isUploadingBeyondImage)">
+            @(isUploadingBeyondImage ? "Uploading..." : "Upload image")
+        </button>
+
+        @if (!string.IsNullOrWhiteSpace(beyondUploadMessage))
+        {
+            <small class="admin-field__hint">
+                @beyondUploadMessage
+            </small>
+        }
+
         @if (!string.IsNullOrWhiteSpace(BeyondTheNumbers.ImageUrl))
         {
             <div class="media-preview">
@@ -103,6 +120,9 @@
     private IBrowserFile? selectedProfileImage;
     private bool isUploadingProfileImage;
     private string? profileUploadMessage;
+    private IBrowserFile? selectedBeyondImage;
+    private bool isUploadingBeyondImage;
+    private string? beyondUploadMessage;
 
     private void OnProfileImageSelected(InputFileChangeEventArgs e)
     {
@@ -157,6 +177,59 @@
         finally
         {
             isUploadingProfileImage = false;
+        }
+    }
+
+    private void OnBeyondImageSelected(InputFileChangeEventArgs e)
+    {
+        selectedBeyondImage = e.File;
+        beyondUploadMessage = null;
+    }
+
+    private async Task UploadBeyondImageAsync()
+    {
+        if (selectedBeyondImage is null)
+            return;
+
+        try
+        {
+            isUploadingBeyondImage = true;
+            beyondUploadMessage = "Uploading...";
+
+            await using var stream =
+                selectedBeyondImage.OpenReadStream(5 * 1024 * 1024);
+
+            using var fileContent = new StreamContent(stream);
+
+            using var form = new MultipartFormDataContent();
+            form.Add(fileContent, "file", selectedBeyondImage.Name);
+
+            var response = await Http.PostAsync(
+                "api/media/beyond-image",
+                form);
+
+            response.EnsureSuccessStatusCode();
+
+            var result =
+                await response.Content.ReadFromJsonAsync<MediaUploadResponse>();
+
+            if (string.IsNullOrWhiteSpace(result?.Url))
+            {
+                beyondUploadMessage = "Upload failed.";
+                return;
+            }
+
+            BeyondTheNumbers.ImageUrl = result.Url;
+            beyondUploadMessage = "Uploaded ✓";
+            selectedBeyondImage = null;
+        }
+        catch
+        {
+            beyondUploadMessage = "Upload failed.";
+        }
+        finally
+        {
+            isUploadingBeyondImage = false;
         }
     }
 
